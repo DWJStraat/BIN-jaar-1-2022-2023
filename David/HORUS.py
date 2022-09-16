@@ -188,3 +188,45 @@ def PCRGCcalc(GC, length):
     totalAT = length - totalGC
     meltingtemp = 4*totalGC + 2*totalAT
     return meltingtemp
+
+def snip(string, site, snipspot):
+    '''
+    Determines the places where a specific restrictor enzyme cut the DNA, and outputs the new, snipped DNA
+
+    Parameters
+    ----------
+    string : The DNA to be examined.
+    site : The site where the restrictor enzyme cuts the DNA.
+    snipspot : How many bases from the start of the cutting site the restrictor enzyme cuts.
+    
+    Returns
+    -------
+    output : The "cut" DNA string, with a ^ on the spot where it cuts
+    snips : The locations where the DNA has been cut
+
+    '''
+    # Verandert de string naar uppercase
+    string = string.upper()
+    # Telt hoevaak de knip site voorkomt op de sequentie
+    i = string.count(site)
+    # Lege variabelen
+    start = 0
+    snips = []
+    output = ''
+    nextstart = 0
+    # Als er tenminste 1 site aanwezig is, scant de While loop de sequentie, returned 
+    # de locaties van de sites, en stopt een ^ op de plaats van de cut.
+    if i > 0:
+        while i > 0 :
+            snip = string.find(site, nextstart)
+            output = string[start:snip-1+snipspot] + '^'
+            snips.append(snip)
+            i = i - 1
+            nextstart = snip + snipspot
+        output = output + string[snip-1+snipspot:]
+    else:
+    # Als er geen site aanwezig is, output de functie dezelfde string
+        output = string
+    
+
+    return output, snips 
