@@ -306,10 +306,13 @@ def proteinweight(protein):
     protein = ''.join(protein.splitlines())
     weight = 0
     table = {
-        'A':89, 'R':174, 'N':132, 'D':133, 'B':133, 'C':121, 'Q':146, 'E':147, 
-        'Z':147, 'G': 75, 'H':155, 'I':131, 'L':131, 'K':146, 'M':149, 'F':165, 
-        'P':115, 'S':105, 'T':119, 'W':204, 'Y':181, 'V':117
+        'A': 89.09, 'C': 121.2, 'D': 133.1, 'E': 147.1, 'F': 165.2,
+        'G': 75.07, 'H': 155.2, 'I': 131.2, 'K': 146.2, 'L': 131.2, 
+        'M': 149.2, 'N': 132.1, 'P': 115.1, 'Q': 146.1, 'R': 174.2, 
+        'S':105.09, 'T': 119.1, 'V': 117.1, 'W': 204.2, 'Y': 181.2,
         }
     for i in protein:
         weight += table[i]
+    length = len(protein)
+    weight = weight - (18.0153*(length-1))
     return weight
