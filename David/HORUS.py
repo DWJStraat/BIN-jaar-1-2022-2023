@@ -230,3 +230,61 @@ def snip(string, site, snipspot):
     
 
     return output, snips 
+
+def cutter(DNA, enzymfile):
+    '''
+    A function that can be used to process restriction enzymes found in a txt file on a string of DNA
+
+    Parameters
+    ----------
+    DNA : The string of DNA to be analyzed
+    enzymfile : The txt file containing the names of the restriction enzymes and their restriction site.
+    Examples of formatting: DdeI C^TGAG
+    
+    Returns
+    -------
+    cutDNA : The DNA after having been cut by the restriction enzymes entered, in list format
+    cuttingenzymes : The enzymes that cut the DNA, in list format
+
+    '''
+    
+    bestand = open (enzymfile)
+    string = DNA
+    cuttingenzymes = []
+    read = True
+    while read == True:
+        line = bestand.readline().strip()
+        if line != '':    
+            enzym, seq = line.split()
+            site = seq
+            site = site.replace("^","")
+            sites = DNA.count(site)
+            if sites > 0:
+                string = string.replace(site, seq)
+                cuttingenzymes.append(enzym)
+        else:
+            read = False
+    cutDNA = string.split("^")
+    return cutDNA, cuttingenzymes
+
+def duploremover(a, b):
+    '''
+    A function that removes elements found in both lists and return a list containing all unique values
+
+    Parameters
+    ----------
+    a : List 1
+    b : List 2
+    Returns
+    -------
+    pile : A list containing only the unique values
+
+    '''
+    pile = a + b
+    pile = list(dict.fromkeys(pile))
+    aset = set(a)
+    bset = set(b)
+    duplicates = list(set(max(aset,bset)).intersection(min(aset,bset)))
+    for element in duplicates:
+        pile.remove(str(element))
+    return pile
