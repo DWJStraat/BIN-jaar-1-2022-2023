@@ -23,6 +23,7 @@ def readfna(file):
     with open(file, 'r') as file:
         line = file.readlines()[1:]
         string = ''.join(line).strip()
+        string = ''.join(string.splitlines())
         return string
 
 # Neemt de string en telt de A, C, G, en T, berekent de totale lengte en percentages, en output dit  
@@ -289,7 +290,6 @@ def duploremover(a, b):
         pile.remove(str(element))
     return pile
 
-
 def proteinweight(protein):
     '''
     This function calculates the weight of a protein
@@ -300,9 +300,10 @@ def proteinweight(protein):
 
     Returns
     -------
-    weight : The weight of the input protein in kDa
+    weight : The weight of the input protein in Da
 
     '''
+    protein = ''.join(protein.splitlines())
     weight = 0
     table = {
         'A':89, 'R':174, 'N':132, 'D':133, 'B':133, 'C':121, 'Q':146, 'E':147, 
