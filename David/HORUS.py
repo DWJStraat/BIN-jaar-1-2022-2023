@@ -14,7 +14,7 @@ def readfna(file):
     
     Parameters
     ----------
-    file : The FASTA file to be examined
+    file : The FASTA file to be examined in string format
     
     Returns
     -------
