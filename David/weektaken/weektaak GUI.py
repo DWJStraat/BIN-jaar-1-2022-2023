@@ -45,7 +45,8 @@ def select_file():
         
     elif types == "Protein":
         length, d, e, r, k, dp, ep, rp, kp, charge = HORUS.weekopdracht3(filename)
-        message=f'D : {d}, E : {e}, R : {r}, K : {k}\nD%: {dp:.2f}%, E%: {ep:.2f}%, R%: {rp:.2f}%, K%: {kp:.2f}%\nLength = {length}, Charge = {charge}'
+        weight = HORUS.weektaak4(filename)
+        message=f'D : {d}, E : {e}, R : {r}, K : {k}\nD%: {dp*100:.2f}%, E%: {ep*100:.2f}%, R%: {rp*100:.2f}%, K%: {kp*100:.2f}%\nLength = {length}, Charge = {charge}\nWeight = {weight/1000:.3f} kDa'
         HORUS.QR(message, 'output')
         showinfo(
             title='Weektaak 3 : Protein',

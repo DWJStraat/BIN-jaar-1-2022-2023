@@ -173,7 +173,12 @@ def weekopdracht3(file):
     print(f'Lengte = {length}')
     print(f'Lading = {charge}')
     return length, d, e, r, k, dp, ep, rp, kp, charge
-        
+
+def weektaak4(file):
+    string = readfna(file)
+    weight = proteinweight(string)
+    return weight
+
 def PCRGCcalc(GC, length):
     '''
     
