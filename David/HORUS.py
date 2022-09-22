@@ -6,6 +6,9 @@ Created on Tue Sep  6 15:16:28 2022
 
 Function: A collection of functions, written by David Straat
 """
+import qrcode
+import cv2
+
 
 # Opent een FNA file en verwijdert de header, en output de file als een string
 def readfna(file):
@@ -316,3 +319,27 @@ def proteinweight(protein):
     length = len(protein)
     weight = weight - (18.0153*(length-1))
     return weight
+
+def QR(string, name):
+    '''
+    This function generates a QR code based on the input in the working directory
+
+    Parameters
+    ----------
+    string : The string of text to be converted into QR
+    name : The name of the QR image
+
+    Returns
+    -------
+    None.
+
+    '''
+    img = qrcode.make(string)
+    type(img)
+    img.save(f'{name}.png')
+    
+def QRread(name):
+    image = cv2.imread(name)
+    detect = cv2.QRCodeDetector()
+    string, points, qrcode = detect.detectAndDecode(image)
+    return string
