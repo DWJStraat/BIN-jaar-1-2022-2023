@@ -344,6 +344,19 @@ def QR(string, name):
     img.save(f'{name}.png')
     
 def QRread(name):
+    '''
+    This function reads a QR code and outputs as a string
+
+    Parameters
+    ----------
+    name : The name of the QR code file
+
+    Returns
+    -------
+    string : Output in string format
+
+    '''
+    
     image = cv2.imread(name)
     detect = cv2.QRCodeDetector()
     string, points, qrcode = detect.detectAndDecode(image)
