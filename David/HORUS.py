@@ -328,7 +328,7 @@ def proteinweight(protein):
     for i in protein:
         weight += table[i]
     # Calculates the length of the protein and removes the weight of H2O from
-    # the 
+    # the total weight
     length = len(protein)
     weight = weight - (18.0153*(length-1))
     return weight
