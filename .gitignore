@@ -1,0 +1,5 @@
+#Files from the David directory not to track
+
+David/*.png
+David/*.pyc
+David/*.fna
