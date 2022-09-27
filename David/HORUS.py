@@ -8,7 +8,8 @@ Function: A collection of functions, written by David Straat
 """
 import qrcode
 import cv2
-
+from colorama import Fore
+from colorama import Style
 
 # Opent een FNA file en verwijdert de header, en output de file als een string
 def readfna(file):
@@ -336,6 +337,7 @@ def proteinweight(protein):
 def QR(string, name):
     '''
     This function generates a QR code based on the input in the working directory
+    Uses qrcode
 
     Parameters
     ----------
@@ -354,6 +356,7 @@ def QR(string, name):
 def QRread(name):
     '''
     This function reads a QR code and outputs as a string
+    Uses cv2
 
     Parameters
     ----------
@@ -369,3 +372,89 @@ def QRread(name):
     detect = cv2.QRCodeDetector()
     string, points, qrcode = detect.detectAndDecode(image)
     return string
+
+def Compare (string1, string2):
+    '''
+    Compares two strings, colors the overlapping characters green, the others
+    red, and calculates the overlap in %
+    Uses Colorama
+
+    Parameters
+    ----------
+    string1 : Input string 1
+    string2 : Input string 2
+
+    Returns
+    -------
+    out1 : Input string 1 but now colored
+    out2 : Input string 2 but now colored
+    overlap : The overlap in %
+
+    '''
+    # Sets up output strings
+    out1 = ''
+    out2 = ''
+    # Calculates the length of the longest input string
+    length = len(max(string1,string2))
+    # Some more empty integers
+    i = 0
+    compare = 0
+    # Cycles through each character in both strings
+    while i < length:
+        # If the character in both strings is the same, puts that character in
+        # the output strings in green, and adds 1 to the Compare variable
+        if string1[i] == string2[i]:
+            out1 = out1 + Green(string1[i])
+            out2 = out2 + Green(string2[i])
+            compare += 1
+        # If they are not the same, puts that character in the output strings
+        # in red.
+        else:
+            out1 = out1 + Red(string1[i])
+            out2 = out2 + Red(string2[i])
+        # Move to next character    
+        i += 1
+    # Calculate overlap in %
+    overlap = compare/length*100
+    # Resets the coloring after each output string so it won't stain the rest 
+    # of the output
+    out1 = out1 + f'{Style.RESET_ALL}'
+    out2 = out2 + f'{Style.RESET_ALL}'
+    return out1, out2, overlap
+
+
+# Colorssss
+def Green(string):
+    '''
+    Makes input bright green
+    Uses Colorama
+
+    Parameters
+    ----------
+    string : Input String
+
+    Returns
+    -------
+    output : Green output string
+
+    '''
+    output = f'{Fore.GREEN}{Style.BRIGHT}{string}'
+    return output
+
+def Red(string):
+    '''
+    Makes input bright red
+    Uses Colorama
+
+    Parameters
+    ----------
+    string : Input String
+
+    Returns
+    -------
+    output : Red output string
+
+    '''
+    output = f'{Fore.RED}{Style.BRIGHT}{string}'
+    return output
+
