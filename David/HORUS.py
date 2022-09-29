@@ -11,7 +11,6 @@ import cv2
 from colorama import Fore
 from colorama import Style
 
-# Opent een FNA file en verwijdert de header, en output de file als een string
 def readfna(file):
     '''
     This function takes a file, removes the first line, and outputs the contents as a single string.
@@ -22,10 +21,13 @@ def readfna(file):
     
     Returns
     -------
-    string : The string of (probably) genetic code contained within the FASTA file.
+    string : The string found within the FASTA file.
     '''
+    # Opens the file
     with open(file, 'r') as file:
+        # Removes the header
         line = file.readlines()[1:]
+        # Removes extra spaces and newlines
         string = ''.join(line).strip()
         string = ''.join(string.splitlines())
         return string
@@ -391,35 +393,50 @@ def Compare (string1, string2):
     overlap : The overlap in %
 
     '''
-    # Sets up output strings
+    # Setting some empty variables
     out1 = ''
     out2 = ''
-    # Calculates the length of the longest input string
-    length = len(max(string1,string2))
-    # Some more empty integers
     i = 0
     compare = 0
-    # Cycles through each character in both strings
+    # Calculates the length of the longest string
+    length = max(len(string1),len(string2))
+    # Loops through each character in the strings
     while i < length:
+        # If one string is shorter than the other, it'll compensate with -'s
+        # to prevent a 'string index out of range'
+        try:
+            v1 = string1[i]
+        except:
+            v1 = "-"    
+        try:
+            v2 = string2[i]
+        except:
+            v2 = "-"
+        
         # If the character in both strings is the same, puts that character in
         # the output strings in green, and adds 1 to the Compare variable
-        if string1[i] == string2[i]:
-            out1 = out1 + Green(string1[i])
-            out2 = out2 + Green(string2[i])
+        if max(v1,v2) == min(v1,v2):
+            out1 = out1 + Green(v1)
+            out2 = out2 + Green(v2)
             compare += 1
+        
         # If they are not the same, puts that character in the output strings
         # in red.
         else:
-            out1 = out1 + Red(string1[i])
-            out2 = out2 + Red(string2[i])
-        # Move to next character    
+            out1 = out1 + Red(v1)
+            out2 = out2 + Red(v2)
+        
+        # Move to next character 
         i += 1
+    
     # Calculate overlap in %
     overlap = compare/length*100
+    
     # Resets the coloring after each output string so it won't stain the rest 
     # of the output
     out1 = out1 + f'{Style.RESET_ALL}'
     out2 = out2 + f'{Style.RESET_ALL}'
+    
     return out1, out2, overlap
 
 
@@ -458,3 +475,27 @@ def Red(string):
     output = f'{Fore.RED}{Style.BRIGHT}{string}'
     return output
 
+def linecounter(file):
+    '''
+    This function is based on the code given as an example for the first
+    function in the first programming test in the year 2022-2023
+
+    Parameters
+    ----------
+    file : Name of the file
+
+    Returns
+    -------
+    counter : Returns the number of lines.
+
+    '''
+    counter = -1
+    with open(file) as opened_file:
+        # For every line in the file, increases the counter by 1 and prints the
+        # line
+        for line in opened_file:
+            counter += 1
+            line = line.replace("/n","")
+            print(line)
+    print(counter)
+    return(counter)
