@@ -18,7 +18,7 @@ from colorama import Style
 from datetime import datetime
 import RPi.GPIO as GPIO
 
-def readfna(file):
+def read_fna(file):
     '''
     This function takes a file, removes the first line, and outputs the 
     contents as a single string.
@@ -40,7 +40,7 @@ def readfna(file):
         string = ''.join(string.splitlines())
         return string
 
-def GPIOreader(Pin, loops):
+def gpio_reader(Pin, loops):
     '''
     Reads GPIO input and exports it as a 2 dimensional list
 
@@ -73,7 +73,7 @@ def GPIOreader(Pin, loops):
         i+=1
     return reader
 
-def AGCTcount(string):
+def agct_count(string):
     '''
     This function counts the A, G, C, and T in the gene provided. 
 
@@ -100,7 +100,7 @@ def AGCTcount(string):
     # Outputs the values
     return A, G, C, T, length
 
-def typeidentify(string):
+def type_identify(string):
     '''
     This function determines the type of the input string: DNA or Protein.
     DEPRECATED, USE is_DNA
@@ -131,7 +131,7 @@ def typeidentify(string):
     print(type)
     return type
 
-def GCpercent(C,G,length):
+def gc_percent(C,G,length):
     '''
     This function calculates the GC% of the gene
 
@@ -154,7 +154,7 @@ def GCpercent(C,G,length):
     return GC
 
 
-def PCRGCcalc(GC, length):
+def pcr_gc_calc(GC, length):
     '''
     
 
@@ -279,7 +279,7 @@ def duploremover(a, b):
         pile.remove(str(element))
     return pile
 
-def proteinweight(protein):
+def protein_weight(protein):
     '''
     This function calculates the weight of a protein
 
@@ -314,7 +314,7 @@ def proteinweight(protein):
     weight = weight - (18.0153*(length-1))
     return weight
 
-def QR(string, name):
+def qr_generator(string, name):
     '''
     This function generates a QR code based on the input in the working directory
     Uses qrcode
@@ -333,7 +333,7 @@ def QR(string, name):
     type(img)
     img.save(f'{name}.png')
     
-def QRread(name):
+def qr_read(name):
     '''
     This function reads a QR code and outputs as a string
     Uses cv2
@@ -353,7 +353,7 @@ def QRread(name):
     string, points, qrcode = detect.detectAndDecode(image)
     return string
 
-def Compare (string1, string2):
+def compare (string1, string2):
     '''
     Compares two strings, colors the overlapping characters green, the others
     red, and calculates the overlap in %
@@ -454,8 +454,8 @@ def is_dna(seq):
     return DNA
 
 
-class Colors:
-    def Green(string):
+class colors:
+    def green(string):
         '''
         Makes input bright green
         Uses Colorama
@@ -472,7 +472,7 @@ class Colors:
         output = f'{Fore.GREEN}{Style.BRIGHT}{string}'
         return output
     
-    def Red(string):
+    def red(string):
         '''
         Makes input bright red
         Uses Colorama
@@ -491,7 +491,7 @@ class Colors:
 
 # Based on class examples
 
-def linecounter(file):
+def line_counter(file):
     '''
     This function is based on the code given as an example for the first
     function in the first programming test in the year 2022-2023
@@ -516,8 +516,8 @@ def linecounter(file):
     print(counter)
     return(counter)
 
-class TutorTasks:
-    def weekopdracht2(file):
+class tutor_tasks:
+    def weekopdracht_2(file):
         '''
         This function takes the input file, and prints the GC% and length
         
@@ -532,10 +532,10 @@ class TutorTasks:
         
         '''
         # Leest de FNA file opgegeven
-        string = readfna(file)
+        string = read_fna(file)
         #Berekent de waardes
-        A, G, C, T, length = AGCTcount(string)
-        GC=GCpercent(G, C, length)
+        A, G, C, T, length = agct_count(string)
+        GC=gc_percent(G, C, length)
         # Output de GC% met 2 decimalen achter de komma
         GC100 = "{:.2f}".format(GC*100)
         print(f'GC% = {GC100}%')
@@ -543,7 +543,7 @@ class TutorTasks:
         print(f"Lengte = {length}")
         return GC100, length
 
-    def weekopdracht3(file):
+    def weekopdracht_3(file):
         '''
         This function takes the input file, and prints the D, E, R, K and length
         
@@ -564,7 +564,7 @@ class TutorTasks:
         kp : the percentage of K amino acids in the protein
         charge: the charge of the protein
         '''
-        string = readfna(file)
+        string = read_fna(file)
         d= string.count("D")
         e= string.count("E")
         r= string.count("R")
@@ -580,14 +580,14 @@ class TutorTasks:
         print(f'Lading = {charge}')
         return length, d, e, r, k, dp, ep, rp, kp, charge
     
-    def weektaak4(file):
-        string = readfna(file)
-        weight = proteinweight(string)
+    def weektaak_4(file):
+        string = read_fna(file)
+        weight = protein_weight(string)
         return weight
 
 
-class Converters:
-    def GPIOToBinary(GPIO):
+class converters:
+    def gpio_to_binary(GPIO):
         '''
         This code converts GPIO input to binary, with the assumption that 101 = 1 
         and 100 = 0
@@ -619,7 +619,7 @@ class Converters:
         return binary
     
     
-    def BinaryToText(binary):
+    def binary_to_text(binary):
         '''
         Converts binary input to string through the ASCII format.
     
