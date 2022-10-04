@@ -15,6 +15,8 @@ import qrcode
 import cv2
 from colorama import Fore
 from colorama import Style
+from datetime import datetime
+import RPi.GPIO as GPIO
 
 def readfna(file):
     '''
@@ -38,6 +40,38 @@ def readfna(file):
         string = ''.join(string.splitlines())
         return string
 
+def GPIOreader(Pin, loops):
+    '''
+    Reads GPIO input and exports it as a 2 dimensional list
+
+    Parameters
+    ----------
+    Pin : The 
+    loops : TYPE
+        DESCRIPTION.
+
+    Returns
+    -------
+    reader : TYPE
+        DESCRIPTION.
+
+    '''
+    reader = [[],[]]
+    RECEIVE_PIN = Pin
+    
+    
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setup(RECEIVE_PIN, GPIO.IN)
+    i = 0
+    while i < loops:
+        time= datetime.now()
+        timestring = time.strftime('%f')
+        reader[0].append(timestring)
+        a = GPIO.input(RECEIVE_PIN)
+        b = str(a)
+        reader[1].append(b)
+        i+=1
+    return reader
 
 def AGCTcount(string):
     '''
