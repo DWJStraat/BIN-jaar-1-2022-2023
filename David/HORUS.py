@@ -19,21 +19,23 @@ from datetime import datetime
 import RPi.GPIO as GPIO
 
 
-def read_fna(file):
+def read_fna(file_name):
     '''
-    This function takes a file, removes the first line, and outputs the
-    contents as a single string.
+    Opens a FNA file, and returns the contents as a single string.
 
     Parameters
     ----------
-    file : The FASTA file to be examined in string format
+    file_name : Str
+        The path of the file to be opened.
 
     Returns
     -------
-    string : The string found within the FASTA file.
+    string : Str
+        The contents of the file, in a single string.
+
     '''
     # Opens the file
-    with open(file, 'r') as file:
+    with open(file_name, 'r') as file:
         # Removes the header
         line = file.readlines()[1:]
         # Removes extra spaces and newlines
@@ -44,18 +46,19 @@ def read_fna(file):
 
 def gpio_reader(Pin, loops):
     '''
-    Reads GPIO input and exports it as a 2 dimensional list
+    Opens a GPIO pin and reads the input, exporting the raw input as a string
 
     Parameters
     ----------
-    Pin : The
-    loops : TYPE
-        DESCRIPTION.
+    Pin : Int
+        The GPIO pin to read.
+    loops : Int
+        The amount of inputs the code should receive.
 
     Returns
     -------
-    reader : TYPE
-        DESCRIPTION.
+    reader : Str
+        The inputs the GPIO pin received.
 
     '''
     reader = [[], []]
@@ -75,109 +78,38 @@ def gpio_reader(Pin, loops):
     return reader
 
 
-def agct_count(string):
+def agct_count(DNA):
     '''
-    This function counts the A, G, C, and T in the gene provided.
+    Counts the amount of A's, G's, C's and T's.
 
     Parameters
     ----------
-    string : A string containing A, G, C, and T
+    string : Str
+        The DNA to be examined.
 
     Returns
     -------
-    A : The amount of A in the string
-    G : The amount of G in the string
-    C : The amount of C in the string
-    T : The amount of T in the string
-    length : The length of the gene
+    A : Int
+        The amount of Adenine bases in the DNA provided.
+    G : Int
+        The amount of Guanine bases in the DNA provided.
+    C : Int
+        The amount of Cytosine bases in the DNA provided.
+    T : Int
+        The amount of Thymine bases in the DNA provided.
+    length : Int
+        The length of the DNA string, counting only the bases counted above.
 
     '''
     # Counts A's, G's, C's and T's
-    A = string.count('A')
-    G = string.count('G')
-    C = string.count('C')
-    T = string.count('T')
+    A = DNA.count('A')
+    G = DNA.count('G')
+    C = DNA.count('C')
+    T = DNA.count('T')
     # Calculates the length
     length = A+G+C+T
     # Outputs the values
     return A, G, C, T, length
-
-
-def type_identify(string):
-    '''
-    This function determines the type of the input string: DNA or Protein.
-    DEPRECATED, USE is_DNA
-
-    Parameters
-    ----------
-    string : The string to be examined
-
-    Returns
-    -------
-    type : Either "DNA" or "Protein"
-
-    '''
-    i = 0
-    scan = False
-    while i <= 25 and scan == False:
-        if string[i] == 'M':
-            type = "Protein"
-            scan = True
-        elif string[i] in ["A", "G", "C", "T"]:
-            type = "DNA"
-            scan = True
-        else:
-            i = i + 1
-
-    if scan == False:
-        print("Not recognized as a gene or protein.")
-    print(type)
-    return type
-
-
-def gc_percent(C, G, length):
-    '''
-    This function calculates the GC% of the gene
-
-    Parameters
-    ----------
-    C : The amount of C in the gene
-    G : The amount of G in the gene
-    length : The length of the gene
-
-    Returns
-    -------
-    GC : The GC% of the gene
-
-    '''
-    # Berekent de A%, G%, C%, en T%
-    Gp = G/length
-    Cp = C/length
-    # Berekent GC% en AT%
-    GC = Gp + Cp
-    return GC
-
-
-def pcr_gc_calc(GC, length):
-    '''
-
-
-    Parameters
-    ----------
-    GC : The GC% of the gene, in 0.xxx
-
-    length : The length of the gene
-
-    Returns
-    -------
-    meltingtemp : The temperature at which the DNA denaturates into two strings
-    in degrees Celsius
-
-    '''
-    totalGC = GC*length
-    totalAT = length - totalGC
-    meltingtemp = 4*totalGC + 2*totalAT
-    return meltingtemp
 
 
 def snip(string, site, snipspot):
@@ -187,9 +119,12 @@ def snip(string, site, snipspot):
 
     Parameters
     ----------
-    string : The DNA to be examined.
-    site : The site where the restrictor enzyme cuts the DNA.
-    snipspot : How many bases from the start of the cutting site the restrictor
+    string : Str
+        The DNA to be examined.
+    site : Str
+        The site where the restrictor enzyme cuts the DNA.
+    snipspot : Int
+        How many bases from the start of the cutting site the restrictor
     enzyme cuts.
 
     Returns
@@ -235,7 +170,7 @@ def cutter(DNA, enzymfile):
     DNA : The string of DNA to be analyzed
     enzymfile : The txt file containing the names of the restriction enzymes
                 and their restriction site.
-    Examples of formatting: DdeI C^TGAG
+                Example of formatting: DdeI C^TGAG
 
     Returns
     -------
@@ -272,11 +207,14 @@ def duploremover(a, b):
 
     Parameters
     ----------
-    a : List 1
-    b : List 2
+    a : List 
+        First list to be analyzed
+    b : List
+        Second list to be analyzed
     Returns
     -------
-    pile : A list containing only the unique values
+    pile : List
+        A list containing only the unique values
 
     '''
     pile = a + b
@@ -295,11 +233,13 @@ def protein_weight(protein):
 
     Parameters
     ----------
-    protein : A string of amino acids
+    protein : Str
+        A string of amino acids
 
     Returns
     -------
-    weight : The weight of the input protein in Da
+    weight : Int
+        The weight of the input protein in Da
 
     '''
     # Removes the \n from the input string
@@ -333,8 +273,10 @@ def qr_generator(string, name):
 
     Parameters
     ----------
-    string : The string of text to be converted into QR
-    name : The name of the QR image
+    string : Str
+        The string of text to be converted into QR
+    name : Str
+        The name of the QR image
 
     Returns
     -------
@@ -353,11 +295,13 @@ def qr_read(name):
 
     Parameters
     ----------
-    name : The name of the QR code file
+    name : Str
+        The name of the QR code file
 
     Returns
     -------
-    string : Output in string format
+    string : Str
+        Output in string format
 
     '''
 
@@ -375,14 +319,19 @@ def compare(string1, string2):
 
     Parameters
     ----------
-    string1 : Input string 1
-    string2 : Input string 2
+    string1 : Str
+        Input string 1
+    string2 : Str
+        Input string 2
 
     Returns
     -------
-    out1 : Input string 1 but now colored
-    out2 : Input string 2 but now colored
-    overlap : The overlap in %
+    out1 : Str
+        Input string 1 but now colored
+    out2 : Str
+        Input string 2 but now colored
+    overlap : Int
+        The overlap in %
 
     '''
     # Setting some empty variables
@@ -455,19 +404,21 @@ def is_dna(seq):
 
     Parameters
     ----------
-    seq : input string
+    seq : Str
+        input string
 
     Returns
     -------
-    DNA : True or False
+    Is_DNA : Bool
+        True or False
 
     '''
     allowed = set('A'+'C'+'T'+'G')
     if set(seq) <= allowed:
-        DNA = True
+        Is_DNA = True
     else:
-        DNA = False
-    return DNA
+        Is_DNA = False
+    return Is_DNA
 
 
 class colors:
@@ -478,11 +429,13 @@ class colors:
 
         Parameters
         ----------
-        string : Input String
+        string : Str
+            Input
 
         Returns
         -------
-        output : Green output string
+        output : Str
+            Green output string
 
         '''
         output = f'{Fore.GREEN}{Style.BRIGHT}{string}'
@@ -495,11 +448,13 @@ class colors:
 
         Parameters
         ----------
-        string : Input String
+        string : Str
+            Input 
 
         Returns
         -------
-        output : Red output string
+        output : Str
+            Red output string
 
         '''
         output = f'{Fore.RED}{Style.BRIGHT}{string}'
@@ -553,7 +508,7 @@ class tutor_tasks:
         string = read_fna(file)
         # Berekent de waardes
         A, G, C, T, length = agct_count(string)
-        GC = gc_percent(G, C, length)
+        GC = (G+C)/length
         # Output de GC% met 2 decimalen achter de komma
         GC100 = "{:.2f}".format(GC*100)
         print(f'GC% = {GC100}%')
