@@ -245,23 +245,23 @@ def cutter(DNA, enzymfile):
 
     '''
 
-    bestand = open(enzymfile)
-    string = DNA
-    cuttingenzymes = []
-    read = True
-    while read == True:
-        line = bestand.readline().strip()
-        if line != '':
-            enzym, seq = line.split()
-            site = seq
-            site = site.replace("^", "")
-            sites = DNA.count(site)
-            if sites > 0:
-                string = string.replace(site, seq)
-                cuttingenzymes.append(enzym)
-        else:
-            read = False
-    cutDNA = string.split("^")
+    with open(enzymfile) as bestand:
+        string = DNA
+        cuttingenzymes = []
+        read = True
+        while read == True:
+            line = bestand.readline().strip()
+            if line != '':
+                enzym, seq = line.split()
+                site = seq
+                site = site.replace("^", "")
+                sites = DNA.count(site)
+                if sites > 0:
+                    string = string.replace(site, seq)
+                    cuttingenzymes.append(enzym)
+            else:
+                read = False
+        cutDNA = string.split("^")
     return cutDNA, cuttingenzymes
 
 
