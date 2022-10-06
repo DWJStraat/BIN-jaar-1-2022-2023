@@ -11,12 +11,12 @@ TODO:
     - remove Dutch comments
     - update cutter
 """
+import numpy
 import qrcode
 import cv2
 from colorama import Fore
 from colorama import Style
 from datetime import datetime
-import RPi.GPIO as GPIO
 
 
 def read_fna(file_name):
@@ -43,39 +43,40 @@ def read_fna(file_name):
         string = ''.join(string.splitlines())
     return string
 
+# Currently broken as I can't find a way to install RPi.GPIO on Python
+#
+# def gpio_reader(Pin, loops):
+#     '''
+#     Opens a GPIO pin and reads the input, exporting the raw input as a string
 
-def gpio_reader(Pin, loops):
-    '''
-    Opens a GPIO pin and reads the input, exporting the raw input as a string
+#     Parameters
+#     ----------
+#     Pin : Int
+#         The GPIO pin to read.
+#     loops : Int
+#         The amount of inputs the code should receive.
 
-    Parameters
-    ----------
-    Pin : Int
-        The GPIO pin to read.
-    loops : Int
-        The amount of inputs the code should receive.
+#     Returns
+#     -------
+#     reader : Str
+#         The inputs the GPIO pin received.
 
-    Returns
-    -------
-    reader : Str
-        The inputs the GPIO pin received.
+#     '''
+#     reader = [[], []]
+#     RECEIVE_PIN = Pin
 
-    '''
-    reader = [[], []]
-    RECEIVE_PIN = Pin
-
-    GPIO.setmode(GPIO.BCM)
-    GPIO.setup(RECEIVE_PIN, GPIO.IN)
-    i = 0
-    while i < loops:
-        time = datetime.now()
-        timestring = time.strftime('%f')
-        reader[0].append(timestring)
-        a = GPIO.input(RECEIVE_PIN)
-        b = str(a)
-        reader[1].append(b)
-        i += 1
-    return reader
+#     GPIO.setmode(GPIO.BCM)
+#     GPIO.setup(RECEIVE_PIN, GPIO.IN)
+#     i = 0
+#     while i < loops:
+#         time = datetime.now()
+#         timestring = time.strftime('%f')
+#         reader[0].append(timestring)
+#         a = GPIO.input(RECEIVE_PIN)
+#         b = str(a)
+#         reader[1].append(b)
+#         i += 1
+#     return reader
 
 
 def agct_count(DNA):
@@ -265,50 +266,50 @@ def protein_weight(protein):
     return weight
 
 
-def qr_generator(string, name):
-    '''
-    This function generates a QR code based on the input in the working
-    directory
-    Uses qrcode
+class QR:
+    def generator(string, name):
+        '''
+        This function generates a QR code based on the input in the working
+        directory
+        Uses qrcode
 
-    Parameters
-    ----------
-    string : Str
-        The string of text to be converted into QR
-    name : Str
-        The name of the QR image
+        Parameters
+        ----------
+        string : Str
+            The string of text to be converted into QR
+        name : Str
+            The name of the QR image
 
-    Returns
-    -------
-    None.
+        Returns
+        -------
+        None.
 
-    '''
-    img = qrcode.make(string)
-    type(img)
-    img.save(f'{name}.png')
+        '''
+        img = qrcode.make(string)
+        type(img)
+        img.save(f'{name}.png')
 
+    def read(name):
+        '''
+        This function reads a QR code and outputs as a string
+        Uses cv2
 
-def qr_read(name):
-    '''
-    This function reads a QR code and outputs as a string
-    Uses cv2
+        Parameters
+        ----------
+        name : Str
+            The name of the QR code file
 
-    Parameters
-    ----------
-    name : Str
-        The name of the QR code file
+        Returns
+        -------
+        string : Str
+            Output in string format
 
-    Returns
-    -------
-    string : Str
-        Output in string format
+        '''
 
-    '''
-
-    image = cv2.imread(name)
-    detect = cv2.QRCodeDetector()
-    string, points, qrcode = detect.detectAndDecode(image)
-    return string
+        image = cv2.imread(name)
+        detect = cv2.QRCodeDetector()
+        string, points, qrcode = detect.detectAndDecode(image)
+        return string
 
 
 def compare(string1, string2):
@@ -381,15 +382,6 @@ def compare(string1, string2):
     return out1, out2, overlap
 
 
-def is_prime(number):
-    prime = True
-    if number > 1:
-        for number2 in range(2, number//2):
-            if number % number2:
-                prime = False
-    return prime
-
-
 def sentinel():
     run = True
     running = input('Would you like to continue? Y/N:').upper()
@@ -398,27 +390,37 @@ def sentinel():
     return run
 
 
-def is_dna(seq):
-    '''
-    Checks if the input string is DNA
+class identify:
 
-    Parameters
-    ----------
-    seq : Str
-        input string
+    def dna(seq):
+        '''
+        Checks if the input string is DNA
 
-    Returns
-    -------
-    Is_DNA : Bool
-        True or False
+        Parameters
+        ----------
+        seq : Str
+            input string
 
-    '''
-    allowed = set('A'+'C'+'T'+'G')
-    if set(seq) <= allowed:
-        Is_DNA = True
-    else:
-        Is_DNA = False
-    return Is_DNA
+        Returns
+        -------
+        Is_DNA : Bool
+            True or False
+
+        '''
+        allowed = set('A'+'C'+'T'+'G')
+        if set(seq) <= allowed:
+            Is_DNA = True
+        else:
+            Is_DNA = False
+        return Is_DNA
+
+    def prime(number):
+        prime = True
+        if number > 1:
+            for number2 in range(2, number//2):
+                if number % number2:
+                    prime = False
+        return prime
 
 
 class colors:
@@ -487,6 +489,41 @@ def line_counter(file):
             print(line)
     print(counter)
     return(counter)
+
+
+def greater_pc_percent_than(file_name, gc_perc=50):
+    '''
+    Calculates how many of the genes in the file provided have a gc% higher 
+    than the percentage given
+
+    Parameters
+    ----------
+    bestandsnaam : Str
+        A CSV file containing multiple genes. GC% must be in the 5th collumn
+    gc_perc : Int, optional
+        The GC% filter the genes need to be above. The default is 50.
+
+    Returns
+    -------
+    number_of_genes_higher_gc : Int
+        The amount of genes above the gc_perc.
+
+    '''
+    number_of_genes_higher_gc = 0
+    with open(file_name) as file:
+        first_line = file.readline()
+        print(first_line)
+        # For each line retrieves the GC%
+        for line in file:
+            line = line.replace("\n", '')
+            information = line.split(',')
+            # GC% is found in the fifth column
+            gc_percentage = float(information[5])
+            # Compares GC% and, if higher than the filter given in gc_perc,
+            # increases the number_of_genes_higher_gc by 1
+            if gc_percentage > gc_perc:
+                number_of_genes_higher_gc += 1
+    return number_of_genes_higher_gc
 
 
 class tutor_tasks:
@@ -611,3 +648,87 @@ class converters:
         ascii_text = binarray.decode()
         text = ascii_text.strip('\x00')
         return text
+
+
+def aligner(string1, string2, hit=1, miss=1, gap=1):
+    '''
+    This piece of code runs a simplified version of the Needleman-Wunsch 
+    algorithm
+
+    Credit to slowkow ( profile: https://gist.github.com/slowkow ) for his 
+    original code
+
+    Parameters
+    ----------
+    string1 : Str
+        The first string to be aligned.
+    string2 : Str
+        The second string to be aligned.
+    hit : Int, optional
+        Hit reward weight. The default is 1.
+    miss : Int, optional
+        Miss penalty weight. The default is 1.
+    gap : Int, optional
+        Higher gap = less gaps. The default is 1.
+
+    Returns
+    -------
+    r1 : Str
+        The first string, aligned with the second.
+    r2 : Str
+        The second string, aligned with the first.
+
+    '''
+    # Credit to slowkow for the original code
+    n1 = len(string1)
+    n2 = len(string2)
+    # Score for each possible pair of characters
+    score = numpy.zeros((n1 + 1, n2 + 1))
+    score[:, 0] = numpy.linspace(0, -n1 * gap, n1 + 1)
+    score[0, :] = numpy.linspace(0, -n2 * gap, n2 + 1)
+    # Find optimal alignment
+    aligner = numpy.zeros((n1+1, n2+1))
+    aligner[:, 0] = 3
+    aligner[0, :] = 4
+    # Temporary scores
+    temp = numpy.zeros(3)
+    for i in range(n1):
+        for j in range(n2):
+            if string1[i] == string2[j]:
+                temp[0] = score[i, j] + hit
+            else:
+                temp[0] = score[i, j] - miss
+            temp[1] = score[i, j+1] - gap
+            temp[2] = score[i+1, j] - gap
+            tempmax = numpy.max(temp)
+            score[i+1, j+1] = tempmax
+            if temp[0] == tempmax:
+                aligner[i+1, j+1] += 2
+            if temp[1] == tempmax:
+                aligner[i+1, j+1] += 3
+            if temp[2] == tempmax:
+                aligner[i+1, j+1] += 4
+
+    # Find an optimal alignment
+    i = n1
+    j = n2
+    r1 = []
+    r2 = []
+    while i > 0 or j > 0:
+        if aligner[i, j] in [2, 5, 6, 9]:
+            r1.append(string1[i-1])
+            r2.append(string2[j-1])
+            i -= 1
+            j -= 1
+        elif aligner[i, j] in [3, 5, 7, 9]:
+            r1.append(string1[i-1])
+            r2.append('-')
+            i -= 1
+        elif aligner[i, j] in [4, 6, 7, 9]:
+            r1.append('-')
+            r2.append(string2[j-1])
+            j -= 1
+    # Reverse the strings
+    r1 = ''.join(r1)[::-1]
+    r2 = ''.join(r2)[::-1]
+    return r1, r2
