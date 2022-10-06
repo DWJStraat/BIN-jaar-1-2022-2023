@@ -16,7 +16,7 @@ import qrcode
 import cv2
 from colorama import Fore
 from colorama import Style
-from datetime import datetime
+#from datetime import datetime
 
 
 def read_fna(file_name):
@@ -693,16 +693,11 @@ class tutor_tasks:
         charge: the charge of the protein
         '''
         string = read_fna(file)
-        d = string.count("D")
-        e = string.count("E")
-        r = string.count("R")
-        k = string.count("K")
-        length = len(string)
+        d, e, r, k, length, charge = protein.derk_counter(string)
         dp = d / length
         ep = e / length
         rp = r / length
         kp = k / length
-        charge = r + k - d - e
         print(f'D:{d}, E:{e}, R:{r}, K:{k}')
         print(f'Lengte = {length}')
         print(f'Lading = {charge}')
@@ -710,7 +705,7 @@ class tutor_tasks:
 
     def weektaak_4(file):
         string = read_fna(file)
-        weight = protein_weight(string)
+        weight = protein.weight(string)
         return weight
 
 
