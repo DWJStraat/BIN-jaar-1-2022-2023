@@ -400,11 +400,11 @@ class compare:
         string2 : Str
             The second string to be aligned.
         hit : Int, optional
-            Hit reward weight. The default is 1.
+            Hit reward. The default is 1.
         miss : Int, optional
-            Miss penalty weight. The default is 1.
+            Miss penalty. The default is 1.
         gap : Int, optional
-            Higher gap = less gaps. The default is 1.
+            Gap penalty. The default is 1..
 
         Returns
         -------
