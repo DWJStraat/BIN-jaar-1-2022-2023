@@ -113,92 +113,92 @@ def agct_count(DNA):
     return A, G, C, T, length
 
 
-def snip(string, site, snipspot):
-    '''
-    Determines the places where a specific restrictor enzyme cut the DNA, and
-    outputs the new, snipped DNA
+class restriction_enzyme:
+    def snip(string, site, snipspot):
+        '''
+        Determines the places where a specific restrictor enzyme cut the DNA, and
+        outputs the new, snipped DNA
 
-    Parameters
-    ----------
-    string : Str
-        The DNA to be examined.
-    site : Str
-        The site where the restrictor enzyme cuts the DNA.
-    snipspot : Int
-        How many bases from the start of the cutting site the restrictor
-    enzyme cuts.
+        Parameters
+        ----------
+        string : Str
+            The DNA to be examined.
+        site : Str
+            The site where the restrictor enzyme cuts the DNA.
+        snipspot : Int
+            How many bases from the start of the cutting site the restrictor
+        enzyme cuts.
 
-    Returns
-    -------
-    output : The "cut" DNA string, with a ^ on the spot where it cuts
-    snips : The locations where the DNA has been cut
+        Returns
+        -------
+        output : The "cut" DNA string, with a ^ on the spot where it cuts
+        snips : The locations where the DNA has been cut
 
-    '''
-    # Verandert de string naar uppercase
-    string = string.upper()
-    # Telt hoevaak de knip site voorkomt op de sequentie
-    i = string.count(site)
-    # Lege variabelen
-    start = 0
-    snips = []
-    output = ''
-    nextstart = 0
-    # Als er tenminste 1 site aanwezig is, scant de While loop de sequentie,
-    # returned de locaties van de sites, en stopt een ^ op de plaats van de
-    # cut.
-    if i > 0:
-        while i > 0:
-            snip = string.find(site, nextstart)
-            output = string[start:snip-1+snipspot] + '^'
-            snips.append(snip)
-            i = i - 1
-            nextstart = snip + snipspot
-        output = output + string[snip-1+snipspot:]
-    else:
-        # Als er geen site aanwezig is, output de functie dezelfde string
-        output = string
+        '''
+        # Verandert de string naar uppercase
+        string = string.upper()
+        # Telt hoevaak de knip site voorkomt op de sequentie
+        i = string.count(site)
+        # Lege variabelen
+        start = 0
+        snips = []
+        output = ''
+        nextstart = 0
+        # Als er tenminste 1 site aanwezig is, scant de While loop de sequentie,
+        # returned de locaties van de sites, en stopt een ^ op de plaats van de
+        # cut.
+        if i > 0:
+            while i > 0:
+                snip = string.find(site, nextstart)
+                output = string[start:snip-1+snipspot] + '^'
+                snips.append(snip)
+                i = i - 1
+                nextstart = snip + snipspot
+            output = output + string[snip-1+snipspot:]
+        else:
+            # Als er geen site aanwezig is, output de functie dezelfde string
+            output = string
 
-    return output, snips
+        return output, snips
 
+    def cutter(DNA, enzymfile):
+        '''
+        A function that can be used to process restriction enzymes found in a txt
+        file on a string of DNA
 
-def cutter(DNA, enzymfile):
-    '''
-    A function that can be used to process restriction enzymes found in a txt
-    file on a string of DNA
+        Parameters
+        ----------
+        DNA : The string of DNA to be analyzed
+        enzymfile : The txt file containing the names of the restriction enzymes
+                    and their restriction site.
+                    Example of formatting: DdeI C^TGAG
 
-    Parameters
-    ----------
-    DNA : The string of DNA to be analyzed
-    enzymfile : The txt file containing the names of the restriction enzymes
-                and their restriction site.
-                Example of formatting: DdeI C^TGAG
+        Returns
+        -------
+        cutDNA : The DNA after having been cut by the restriction enzymes entered,
+                 in list format
+        cuttingenzymes : The enzymes that cut the DNA, in list format
 
-    Returns
-    -------
-    cutDNA : The DNA after having been cut by the restriction enzymes entered,
-             in list format
-    cuttingenzymes : The enzymes that cut the DNA, in list format
+        '''
 
-    '''
-
-    with open(enzymfile) as bestand:
-        string = DNA
-        cuttingenzymes = []
-        read = True
-        while read == True:
-            line = bestand.readline().strip()
-            if line != '':
-                enzym, seq = line.split()
-                site = seq
-                site = site.replace("^", "")
-                sites = DNA.count(site)
-                if sites > 0:
-                    string = string.replace(site, seq)
-                    cuttingenzymes.append(enzym)
-            else:
-                read = False
-        cutDNA = string.split("^")
-    return cutDNA, cuttingenzymes
+        with open(enzymfile) as bestand:
+            string = DNA
+            cuttingenzymes = []
+            read = True
+            while read == True:
+                line = bestand.readline().strip()
+                if line != '':
+                    enzym, seq = line.split()
+                    site = seq
+                    site = site.replace("^", "")
+                    sites = DNA.count(site)
+                    if sites > 0:
+                        string = string.replace(site, seq)
+                        cuttingenzymes.append(enzym)
+                else:
+                    read = False
+            cutDNA = string.split("^")
+        return cutDNA, cuttingenzymes
 
 
 def duploremover(a, b):
@@ -312,74 +312,158 @@ class QR:
         return string
 
 
-def compare(string1, string2):
-    '''
-    Compares two strings, colors the overlapping characters green, the others
-    red, and calculates the overlap in %
-    Uses Colorama
+class compare:
+    def compare(string1, string2):
+        '''
+        Compares two strings, colors the overlapping characters green, the others
+        red, and calculates the overlap in %
+        Uses Colorama
 
-    Parameters
-    ----------
-    string1 : Str
-        Input string 1
-    string2 : Str
-        Input string 2
+        Parameters
+        ----------
+        string1 : Str
+            Input string 1
+        string2 : Str
+            Input string 2
 
-    Returns
-    -------
-    out1 : Str
-        Input string 1 but now colored
-    out2 : Str
-        Input string 2 but now colored
-    overlap : Int
-        The overlap in %
+        Returns
+        -------
+        out1 : Str
+            Input string 1 but now colored
+        out2 : Str
+            Input string 2 but now colored
+        overlap : Int
+            The overlap in %
 
-    '''
-    # Setting some empty variables
-    out1 = ''
-    out2 = ''
-    i = 0
-    compare = 0
-    # Calculates the length of the longest string
-    length = max(len(string1), len(string2))
-    # Loops through each character in the strings
-    while i < length:
-        # If one string is shorter than the other, it'll compensate with -'s
-        # to prevent a 'string index out of range'
-        try:
-            v1 = string1[i]
-        except:
-            v1 = "-"
-        try:
-            v2 = string2[i]
-        except:
-            v2 = "-"
+        '''
+        # Setting some empty variables
+        out1 = ''
+        out2 = ''
+        i = 0
+        compare = 0
+        # Calculates the length of the longest string
+        length = max(len(string1), len(string2))
+        # Loops through each character in the strings
+        while i < length:
+            # If one string is shorter than the other, it'll compensate with -'s
+            # to prevent a 'string index out of range'
+            try:
+                v1 = string1[i]
+            except:
+                v1 = "-"
+            try:
+                v2 = string2[i]
+            except:
+                v2 = "-"
 
-        # If the character in both strings is the same, puts that character in
-        # the output strings in green, and adds 1 to the Compare variable
-        if max(v1, v2) == min(v1, v2):
-            out1 = out1 + colors.green(v1)
-            out2 = out2 + colors.green(v2)
-            compare += 1
+            # If the character in both strings is the same, puts that character in
+            # the output strings in green, and adds 1 to the Compare variable
+            if max(v1, v2) == min(v1, v2):
+                out1 = out1 + colors.green(v1)
+                out2 = out2 + colors.green(v2)
+                compare += 1
 
-        # If they are not the same, puts that character in the output strings
-        # in red.
-        else:
-            out1 = out1 + colors.red(v1)
-            out2 = out2 + colors.red(v2)
+            # If they are not the same, puts that character in the output strings
+            # in red.
+            else:
+                out1 = out1 + colors.red(v1)
+                out2 = out2 + colors.red(v2)
 
-        # Move to next character
-        i += 1
+            # Move to next character
+            i += 1
 
-    # Calculate overlap in %
-    overlap = compare/length*100
+        # Calculate overlap in %
+        overlap = compare/length*100
 
-    # Resets the coloring after each output string so it won't stain the rest
-    # of the output
-    out1 = out1 + f'{Style.RESET_ALL}'
-    out2 = out2 + f'{Style.RESET_ALL}'
+        # Resets the coloring after each output string so it won't stain the rest
+        # of the output
+        out1 = out1 + f'{Style.RESET_ALL}'
+        out2 = out2 + f'{Style.RESET_ALL}'
 
-    return out1, out2, overlap
+        return out1, out2, overlap
+
+    def aligner(string1, string2, hit=1, miss=1, gap=1):
+        '''
+        This piece of code runs a simplified version of the Needleman-Wunsch 
+        algorithm
+
+        Credit to slowkow ( profile: https://gist.github.com/slowkow ) for his 
+        original code
+
+        Parameters
+        ----------
+        string1 : Str
+            The first string to be aligned.
+        string2 : Str
+            The second string to be aligned.
+        hit : Int, optional
+            Hit reward weight. The default is 1.
+        miss : Int, optional
+            Miss penalty weight. The default is 1.
+        gap : Int, optional
+            Higher gap = less gaps. The default is 1.
+
+        Returns
+        -------
+        r1 : Str
+            The first string, aligned with the second.
+        r2 : Str
+            The second string, aligned with the first.
+
+        '''
+        # Credit to slowkow for the original code
+        n1 = len(string1)
+        n2 = len(string2)
+        # Score for each possible pair of characters
+        score = numpy.zeros((n1 + 1, n2 + 1))
+        score[:, 0] = numpy.linspace(0, -n1 * gap, n1 + 1)
+        score[0, :] = numpy.linspace(0, -n2 * gap, n2 + 1)
+        # Find optimal alignment
+        aligner = numpy.zeros((n1+1, n2+1))
+        aligner[:, 0] = 3
+        aligner[0, :] = 4
+        # Temporary scores
+        temp = numpy.zeros(3)
+        for i in range(n1):
+            for j in range(n2):
+                if string1[i] == string2[j]:
+                    temp[0] = score[i, j] + hit
+                else:
+                    temp[0] = score[i, j] - miss
+                temp[1] = score[i, j+1] - gap
+                temp[2] = score[i+1, j] - gap
+                tempmax = numpy.max(temp)
+                score[i+1, j+1] = tempmax
+                if temp[0] == tempmax:
+                    aligner[i+1, j+1] += 2
+                if temp[1] == tempmax:
+                    aligner[i+1, j+1] += 3
+                if temp[2] == tempmax:
+                    aligner[i+1, j+1] += 4
+
+        # Find an optimal alignment
+        i = n1
+        j = n2
+        r1 = []
+        r2 = []
+        while i > 0 or j > 0:
+            if aligner[i, j] in [2, 5, 6, 9]:
+                r1.append(string1[i-1])
+                r2.append(string2[j-1])
+                i -= 1
+                j -= 1
+            elif aligner[i, j] in [3, 5, 7, 9]:
+                r1.append(string1[i-1])
+                r2.append('-')
+                i -= 1
+            elif aligner[i, j] in [4, 6, 7, 9]:
+                r1.append('-')
+                r2.append(string2[j-1])
+                j -= 1
+        # Reverse the strings
+        r1 = ''.join(r1)[::-1]
+        r2 = ''.join(r2)[::-1]
+        return r1, r2
 
 
 def sentinel():
@@ -648,87 +732,3 @@ class converters:
         ascii_text = binarray.decode()
         text = ascii_text.strip('\x00')
         return text
-
-
-def aligner(string1, string2, hit=1, miss=1, gap=1):
-    '''
-    This piece of code runs a simplified version of the Needleman-Wunsch 
-    algorithm
-
-    Credit to slowkow ( profile: https://gist.github.com/slowkow ) for his 
-    original code
-
-    Parameters
-    ----------
-    string1 : Str
-        The first string to be aligned.
-    string2 : Str
-        The second string to be aligned.
-    hit : Int, optional
-        Hit reward weight. The default is 1.
-    miss : Int, optional
-        Miss penalty weight. The default is 1.
-    gap : Int, optional
-        Higher gap = less gaps. The default is 1.
-
-    Returns
-    -------
-    r1 : Str
-        The first string, aligned with the second.
-    r2 : Str
-        The second string, aligned with the first.
-
-    '''
-    # Credit to slowkow for the original code
-    n1 = len(string1)
-    n2 = len(string2)
-    # Score for each possible pair of characters
-    score = numpy.zeros((n1 + 1, n2 + 1))
-    score[:, 0] = numpy.linspace(0, -n1 * gap, n1 + 1)
-    score[0, :] = numpy.linspace(0, -n2 * gap, n2 + 1)
-    # Find optimal alignment
-    aligner = numpy.zeros((n1+1, n2+1))
-    aligner[:, 0] = 3
-    aligner[0, :] = 4
-    # Temporary scores
-    temp = numpy.zeros(3)
-    for i in range(n1):
-        for j in range(n2):
-            if string1[i] == string2[j]:
-                temp[0] = score[i, j] + hit
-            else:
-                temp[0] = score[i, j] - miss
-            temp[1] = score[i, j+1] - gap
-            temp[2] = score[i+1, j] - gap
-            tempmax = numpy.max(temp)
-            score[i+1, j+1] = tempmax
-            if temp[0] == tempmax:
-                aligner[i+1, j+1] += 2
-            if temp[1] == tempmax:
-                aligner[i+1, j+1] += 3
-            if temp[2] == tempmax:
-                aligner[i+1, j+1] += 4
-
-    # Find an optimal alignment
-    i = n1
-    j = n2
-    r1 = []
-    r2 = []
-    while i > 0 or j > 0:
-        if aligner[i, j] in [2, 5, 6, 9]:
-            r1.append(string1[i-1])
-            r2.append(string2[j-1])
-            i -= 1
-            j -= 1
-        elif aligner[i, j] in [3, 5, 7, 9]:
-            r1.append(string1[i-1])
-            r2.append('-')
-            i -= 1
-        elif aligner[i, j] in [4, 6, 7, 9]:
-            r1.append('-')
-            r2.append(string2[j-1])
-            j -= 1
-    # Reverse the strings
-    r1 = ''.join(r1)[::-1]
-    r2 = ''.join(r2)[::-1]
-    return r1, r2
