@@ -201,69 +201,76 @@ class restriction_enzyme:
         return cutDNA, cuttingenzymes
 
 
-def duploremover(a, b):
-    '''
-    A function that removes elements found in both lists and return a list
-    containing all unique values
+class protein:
+    def weight(protein):
+        '''
+        This function calculates the weight of a protein
 
-    Parameters
-    ----------
-    a : List 
-        First list to be analyzed
-    b : List
-        Second list to be analyzed
-    Returns
-    -------
-    pile : List
-        A list containing only the unique values
+        Parameters
+        ----------
+        protein : Str
+            A string of amino acids
 
-    '''
-    pile = a + b
-    pile = list(dict.fromkeys(pile))
-    aset = set(a)
-    bset = set(b)
-    duplicates = list(set(max(aset, bset)).intersection(min(aset, bset)))
-    for element in duplicates:
-        pile.remove(str(element))
-    return pile
+        Returns
+        -------
+        weight : Int
+            The weight of the input protein in Da
+
+        '''
+        # Removes the \n from the input string
+        protein = ''.join(protein.splitlines())
+        # Sets the weight integer to 0
+        weight = 0
+        # Creates a dictionary with the molecular weights of each amino acid
+        table = {
+            'A': 89.09, 'C': 121.2, 'D': 133.1, 'E': 147.1, 'F': 165.2,
+            'G': 75.07, 'H': 155.2, 'I': 131.2, 'K': 146.2, 'L': 131.2,
+            'M': 149.2, 'N': 132.1, 'P': 115.1, 'Q': 146.1, 'R': 174.2,
+            'S': 105.09, 'T': 119.1, 'V': 117.1, 'W': 204.2, 'Y': 181.2
+        }
+        # For each amino acid, compares the abbreviation of the amino acid with
+        # the weight found in the table dictionary, and adds the weight to the
+        # weight variable
+        for i in protein:
+            weight += table[i]
+        # Calculates the length of the protein and removes the weight of H2O from
+        # the total weight
+        length = len(protein)
+        weight = weight - (18.0153*(length-1))
+        return weight
+
+    def derk_counter(protein):
+        '''
 
 
-def protein_weight(protein):
-    '''
-    This function calculates the weight of a protein
+        Parameters
+        ----------
+        protein : Str
+            The protein code to be examined.
 
-    Parameters
-    ----------
-    protein : Str
-        A string of amino acids
+        Returns
+        -------
+        d : Int
+            The amount of Aspartic Acid in the protein.
+        e : Int
+            The amount of Glutamic Acid in the protein.
+        r : Int
+            The amount of Arganine in the protein.
+        k : Int
+            The amount of Lysine in the protein.
+        length : Int
+            The length of the protein.
+        charge : Int
+            The charge of the protein, based on the D, E, R, and K counts.
 
-    Returns
-    -------
-    weight : Int
-        The weight of the input protein in Da
-
-    '''
-    # Removes the \n from the input string
-    protein = ''.join(protein.splitlines())
-    # Sets the weight integer to 0
-    weight = 0
-    # Creates a dictionary with the molecular weights of each amino acid
-    table = {
-        'A': 89.09, 'C': 121.2, 'D': 133.1, 'E': 147.1, 'F': 165.2,
-        'G': 75.07, 'H': 155.2, 'I': 131.2, 'K': 146.2, 'L': 131.2,
-        'M': 149.2, 'N': 132.1, 'P': 115.1, 'Q': 146.1, 'R': 174.2,
-        'S': 105.09, 'T': 119.1, 'V': 117.1, 'W': 204.2, 'Y': 181.2
-    }
-    # For each amino acid, compares the abbreviation of the amino acid with
-    # the weight found in the table dictionary, and adds the weight to the
-    # weight variable
-    for i in protein:
-        weight += table[i]
-    # Calculates the length of the protein and removes the weight of H2O from
-    # the total weight
-    length = len(protein)
-    weight = weight - (18.0153*(length-1))
-    return weight
+        '''
+        d = protein.count("D")
+        e = protein.count("E")
+        r = protein.count("R")
+        k = protein.count("K")
+        length = len(protein)
+        charge = r + k - d - e
+        return d, e, r, k, length, charge
 
 
 class QR:
@@ -464,6 +471,32 @@ class compare:
         r1 = ''.join(r1)[::-1]
         r2 = ''.join(r2)[::-1]
         return r1, r2
+
+    def duploremover(a, b):
+        '''
+        A function that removes elements found in both lists and return a list
+        containing all unique values
+
+        Parameters
+        ----------
+        a : List 
+            First list to be analyzed
+        b : List
+            Second list to be analyzed
+        Returns
+        -------
+        pile : List
+            A list containing only the unique values
+
+        '''
+        pile = a + b
+        pile = list(dict.fromkeys(pile))
+        aset = set(a)
+        bset = set(b)
+        duplicates = list(set(max(aset, bset)).intersection(min(aset, bset)))
+        for element in duplicates:
+            pile.remove(str(element))
+        return pile
 
 
 def sentinel():
