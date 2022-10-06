@@ -7,9 +7,8 @@ Created on Tue Sep  6 15:16:28 2022
 Function: A collection of functions, written by David Straat
 
 TODO:
-    - find a way to better group functions
-    - remove Dutch comments
     - update cutter
+    - fix read.gpio
 """
 import numpy
 import qrcode
@@ -19,64 +18,65 @@ from colorama import Style
 #from datetime import datetime
 
 
-def read_fna(file_name):
-    '''
-    Opens a FNA file, and returns the contents as a single string.
+class read:
+    def fna(file_name):
+        '''
+        Opens a FNA file, and returns the contents as a single string.
 
-    Parameters
-    ----------
-    file_name : Str
-        The path of the file to be opened.
+        Parameters
+        ----------
+        file_name : Str
+            The path of the file to be opened.
 
-    Returns
-    -------
-    string : Str
-        The contents of the file, in a single string.
+        Returns
+        -------
+        string : Str
+            The contents of the file, in a single string.
 
-    '''
-    # Opens the file
-    with open(file_name, 'r') as file:
-        # Removes the header
-        line = file.readlines()[1:]
-        # Removes extra spaces and newlines
-        string = ''.join(line).strip()
-        string = ''.join(string.splitlines())
-    return string
+        '''
+        # Opens the file
+        with open(file_name, 'r') as file:
+            # Removes the header
+            line = file.readlines()[1:]
+            # Removes extra spaces and newlines
+            string = ''.join(line).strip()
+            string = ''.join(string.splitlines())
+        return string
 
-# Currently broken as I can't find a way to install RPi.GPIO on Python
-#
-# def gpio_reader(Pin, loops):
-#     '''
-#     Opens a GPIO pin and reads the input, exporting the raw input as a string
+    # Currently broken as I can't find a way to install RPi.GPIO on Python
+    #
+    # def gpio(Pin, loops):
+    #     '''
+    #     Opens a GPIO pin and reads the input, exporting the raw input as a string
 
-#     Parameters
-#     ----------
-#     Pin : Int
-#         The GPIO pin to read.
-#     loops : Int
-#         The amount of inputs the code should receive.
+    #     Parameters
+    #     ----------
+    #     Pin : Int
+    #         The GPIO pin to read.
+    #     loops : Int
+    #         The amount of inputs the code should receive.
 
-#     Returns
-#     -------
-#     reader : Str
-#         The inputs the GPIO pin received.
+    #     Returns
+    #     -------
+    #     reader : Str
+    #         The inputs the GPIO pin received.
 
-#     '''
-#     reader = [[], []]
-#     RECEIVE_PIN = Pin
+    #     '''
+    #     reader = [[], []]
+    #     RECEIVE_PIN = Pin
 
-#     GPIO.setmode(GPIO.BCM)
-#     GPIO.setup(RECEIVE_PIN, GPIO.IN)
-#     i = 0
-#     while i < loops:
-#         time = datetime.now()
-#         timestring = time.strftime('%f')
-#         reader[0].append(timestring)
-#         a = GPIO.input(RECEIVE_PIN)
-#         b = str(a)
-#         reader[1].append(b)
-#         i += 1
-#     return reader
+    #     GPIO.setmode(GPIO.BCM)
+    #     GPIO.setup(RECEIVE_PIN, GPIO.IN)
+    #     i = 0
+    #     while i < loops:
+    #         time = datetime.now()
+    #         timestring = time.strftime('%f')
+    #         reader[0].append(timestring)
+    #         a = GPIO.input(RECEIVE_PIN)
+    #         b = str(a)
+    #         reader[1].append(b)
+    #         i += 1
+    #     return reader
 
 
 def agct_count(DNA):
@@ -135,18 +135,14 @@ class restriction_enzyme:
         snips : The locations where the DNA has been cut
 
         '''
-        # Verandert de string naar uppercase
-        string = string.upper()
-        # Telt hoevaak de knip site voorkomt op de sequentie
+        # Counts how often the restriction site appears in the string
         i = string.count(site)
-        # Lege variabelen
+        # Empty vars
         start = 0
         snips = []
         output = ''
         nextstart = 0
-        # Als er tenminste 1 site aanwezig is, scant de While loop de sequentie,
-        # returned de locaties van de sites, en stopt een ^ op de plaats van de
-        # cut.
+        # If at least 1 cutting site is present in the DNA, this loop will cycle through the DNA, adds the location to a list, and inserts a ^ at the site
         if i > 0:
             while i > 0:
                 snip = string.find(site, nextstart)
@@ -156,7 +152,7 @@ class restriction_enzyme:
                 nextstart = snip + snipspot
             output = output + string[snip-1+snipspot:]
         else:
-            # Als er geen site aanwezig is, output de functie dezelfde string
+            # If no sites are found, outputs the input
             output = string
 
         return output, snips
@@ -418,7 +414,6 @@ class compare:
             The second string, aligned with the first.
 
         '''
-        # Credit to slowkow for the original code
         n1 = len(string1)
         n2 = len(string2)
         # Score for each possible pair of characters
@@ -615,7 +610,7 @@ def greater_pc_percent_than(file_name, gc_perc=50):
 
     Parameters
     ----------
-    bestandsnaam : Str
+    file_name : Str
         A CSV file containing multiple genes. GC% must be in the 5th collumn
     gc_perc : Int, optional
         The GC% filter the genes need to be above. The default is 50.
@@ -658,16 +653,16 @@ class tutor_tasks:
         length: The length of the gene in the FASTA file.
 
         '''
-        # Leest de FNA file opgegeven
-        string = read_fna(file)
-        # Berekent de waardes
+        # Reads FNA file
+        string = read.fna(file)
+        # Calculates values
         A, G, C, T, length = agct_count(string)
         GC = (G+C)/length
-        # Output de GC% met 2 decimalen achter de komma
+        # Outputs the GC% with 2 decimals
         GC100 = "{:.2f}".format(GC*100)
         print(f'GC% = {GC100}%')
-        # Print de lengte
-        print(f"Lengte = {length}")
+        # Prints length
+        print(f"Length = {length}")
         return GC100, length
 
     def weekopdracht_3(file):
@@ -692,24 +687,24 @@ class tutor_tasks:
         kp : the percentage of K amino acids in the protein
         charge: the charge of the protein
         '''
-        string = read_fna(file)
+        string = read.fna(file)
         d, e, r, k, length, charge = protein.derk_counter(string)
         dp = d / length
         ep = e / length
         rp = r / length
         kp = k / length
         print(f'D:{d}, E:{e}, R:{r}, K:{k}')
-        print(f'Lengte = {length}')
-        print(f'Lading = {charge}')
+        print(f'Length = {length}')
+        print(f'Charge = {charge}')
         return length, d, e, r, k, dp, ep, rp, kp, charge
 
     def weektaak_4(file):
-        string = read_fna(file)
+        string = read.fna(file)
         weight = protein.weight(string)
         return weight
 
 
-class converters:
+class convert:
     def gpio_to_binary(GPIO):
         '''
         This code converts GPIO input to binary, with the assumption that 101
