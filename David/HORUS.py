@@ -79,6 +79,32 @@ class read:
     #     return reader
 
 
+def counter(string, list_of_parameters):
+    '''
+    Counts each instance of the characters input in the list of 
+    parameters, and inputs the counted number as a list.
+
+    Parameters
+    ----------
+    string : Str
+        The string to be analyzed.
+    list_of_parameters : List
+        A list containing all the strings whose instances will be counted.
+
+    Returns
+    -------
+    count : List
+        A list containing the (integer) counts of instances defined in 
+        list_of_parameters.
+
+    '''
+    count = []
+    for parameter in list_of_parameters:
+        no = string.count(parameter)
+        count.append(no)
+    return count
+
+
 def agct_count(DNA):
     '''
     Counts the amount of A's, G's, C's and T's.
@@ -103,10 +129,11 @@ def agct_count(DNA):
 
     '''
     # Counts A's, G's, C's and T's
-    A = DNA.count('A')
-    G = DNA.count('G')
-    C = DNA.count('C')
-    T = DNA.count('T')
+    count = counter(DNA, ['A', 'C', 'G', 'T'])
+    A = count[0]
+    C = count[1]
+    G = count[2]
+    T = count[3]
     # Calculates the length
     length = A+G+C+T
     # Outputs the values
@@ -260,10 +287,11 @@ class protein:
             The charge of the protein, based on the D, E, R, and K counts.
 
         '''
-        d = protein.count("D")
-        e = protein.count("E")
-        r = protein.count("R")
-        k = protein.count("K")
+        count = counter(protein, ['D', 'E', 'R', 'K'])
+        d = count[0]
+        e = count[1]
+        r = count[2]
+        k = count[3]
         length = len(protein)
         charge = r + k - d - e
         return d, e, r, k, length, charge
