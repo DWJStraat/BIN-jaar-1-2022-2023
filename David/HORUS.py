@@ -43,6 +43,17 @@ class read:
             string = ''.join(string.splitlines())
         return string
 
+    def CSV(file_name):
+        teller = 0
+        csv = []
+        with open(file_name) as file:
+            for line in file:
+                teller += 1
+                line = line.replace("\n", "")
+                csvline = line.split(',')
+                csv.append(csvline)
+        return csv
+
     # Currently broken as I can't find a way to install RPi.GPIO on Python
     #
     # def gpio(Pin, loops):
@@ -664,6 +675,9 @@ def greater_pc_percent_than(file_name, gc_perc=50):
             if gc_percentage > gc_perc:
                 number_of_genes_higher_gc += 1
     return number_of_genes_higher_gc
+
+
+# CSV_Reader: See read.CSV
 
 
 class tutor_tasks:
