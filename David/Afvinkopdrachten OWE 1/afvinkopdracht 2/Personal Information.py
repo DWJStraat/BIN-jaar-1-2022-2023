@@ -1,0 +1,1 @@
+print("I am David Straat. \nI live on Gouverneurslaan 20, Veenendaal, Utrecht, Netherlands. \nMy phone nr. is 06-57709803. \nMy college major is Bio-Informatics")
