@@ -51,13 +51,11 @@ def Average_Column(index, CSV):
     '''
     counter = 0
     total = 0
-    # Column how many rows the file has
-    rows = len(CSV)
     # If the line contains anything that can be turned into a float, it does
     # so and adds 1 to the Counter
-    for line in range(rows):
+    for i in csv:
         try:
-            total += float(CSV[line][index])
+            total += float(i[index])
             counter += 1
         except:
             continue
