@@ -1,3 +1,6 @@
+"""
+Overgeschreven van Thijn van Kempen tijdens de nabespreking van de toets op 18 Oktoboer 2022 door David Straat
+"""
 def aantal_a_t_mutaties(bestandsnaam):
     a_t_teller = 0
     try:
