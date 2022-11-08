@@ -15,12 +15,12 @@ import qrcode
 import cv2
 from colorama import Fore
 from colorama import Style
-#from datetime import datetime
+# from datetime import datetime
 
 
 class read:
     def fna(file_name):
-        '''
+        """
         Opens a FNA file, and returns the contents as a single string.
 
         Parameters
@@ -33,7 +33,7 @@ class read:
         string : Str
             The contents of the file, in a single string.
 
-        '''
+        """
         # Opens the file
         with open(file_name, 'r') as file:
             # Removes the header
@@ -42,6 +42,34 @@ class read:
             string = ''.join(line).strip()
             string = ''.join(string.splitlines())
         return string
+
+    def multipleFna(file_name):
+        """
+        Opens a FNA file, and returns the contents as a list of strings separated
+        at the headers.
+
+        Parameters
+        ----------
+        file_name : Str
+            The path of the file to be opened.
+
+        Returns
+        -------
+        list : List
+            The contents of the file, in a list of strings, separated at the
+            headers.
+        """
+        with open(file_name, "r") as file:
+            content = file.readlines()[1:]
+            full_sequence = ""
+            for line in content:
+                if line[0] != ">":
+                    full_sequence += line.strip()
+                else:
+                    full_sequence += "\n"
+            list = full_sequence.split("\n")
+        return list
+
 
     def CSV(file_name):
         teller = 0
@@ -54,11 +82,13 @@ class read:
                 csv.append(csvline)
         return csv
 
+
     # Currently broken as I can't find a way to install RPi.GPIO on Python
     #
     # def gpio(Pin, loops):
-    #     '''
-    #     Opens a GPIO pin and reads the input, exporting the raw input as a string
+    #     """
+    #     Opens a GPIO pin and reads the input, exporting the raw input as a
+    #     string
 
     #     Parameters
     #     ----------
@@ -72,7 +102,7 @@ class read:
     #     reader : Str
     #         The inputs the GPIO pin received.
 
-    #     '''
+    #     """
     #     reader = [[], []]
     #     RECEIVE_PIN = Pin
 
@@ -91,7 +121,7 @@ class read:
 
 
 def counter(string, list_of_parameters):
-    '''
+    """
     Counts each instance of the characters input in the list of 
     parameters, and inputs the counted number as a list.
 
@@ -108,7 +138,7 @@ def counter(string, list_of_parameters):
         A list containing the (integer) counts of instances defined in 
         list_of_parameters.
 
-    '''
+    """
     count = []
     for parameter in list_of_parameters:
         no = string.count(parameter)
@@ -117,7 +147,7 @@ def counter(string, list_of_parameters):
 
 
 def agct_count(DNA):
-    '''
+    """
     Counts the amount of A's, G's, C's and T's.
 
     Parameters
@@ -127,35 +157,40 @@ def agct_count(DNA):
 
     Returns
     -------
-    A : Int
+    a : Int
         The amount of Adenine bases in the DNA provided.
-    G : Int
+    g : Int
         The amount of Guanine bases in the DNA provided.
-    C : Int
+    c : Int
         The amount of Cytosine bases in the DNA provided.
-    T : Int
+    t : Int
         The amount of Thymine bases in the DNA provided.
     length : Int
         The length of the DNA string, counting only the bases counted above.
 
-    '''
+    """
     # Counts A's, G's, C's and T's
     count = counter(DNA, ['A', 'C', 'G', 'T'])
-    A = count[0]
-    C = count[1]
-    G = count[2]
-    T = count[3]
+    a = count[0]
+    c = count[1]
+    g = count[2]
+    t = count[3]
     # Calculates the length
-    length = A+G+C+T
+    length = a+g+c+t
     # Outputs the values
-    return A, G, C, T, length
+    return a, g, c, t, length
 
 
 class restriction_enzyme:
+    """
+    This Class covers different functions that can be used to analyze DNA
+    sequences, specifically about restriction enzymes.
+    """
+
     def snip(string, site, snipspot):
-        '''
-        Determines the places where a specific restrictor enzyme cut the DNA, and
-        outputs the new, snipped DNA
+        """
+        Determines the places where a specific restrictor enzyme cut the DNA,
+        and outputs the new, snipped DNA
 
         Parameters
         ----------
@@ -172,7 +207,7 @@ class restriction_enzyme:
         output : The "cut" DNA string, with a ^ on the spot where it cuts
         snips : The locations where the DNA has been cut
 
-        '''
+        """
         # Counts how often the restriction site appears in the string
         i = string.count(site)
         # Empty vars
@@ -180,7 +215,9 @@ class restriction_enzyme:
         snips = []
         output = ''
         nextstart = 0
-        # If at least 1 cutting site is present in the DNA, this loop will cycle through the DNA, adds the location to a list, and inserts a ^ at the site
+        # If at least 1 cutting site is present in the DNA, this loop will
+        # cycle through the DNA, adds the location to a list, and inserts a ^
+        # at the site
         if i > 0:
             while i > 0:
                 snip = string.find(site, nextstart)
@@ -196,7 +233,7 @@ class restriction_enzyme:
         return output, snips
 
     def cutter(DNA, enzymfile):
-        '''
+        """
         A function that can be used to process restriction enzymes found in a txt
         file on a string of DNA
 
@@ -213,7 +250,7 @@ class restriction_enzyme:
                  in list format
         cuttingenzymes : The enzymes that cut the DNA, in list format
 
-        '''
+        """
 
         with open(enzymfile) as bestand:
             string = DNA
@@ -237,7 +274,7 @@ class restriction_enzyme:
 
 class protein:
     def weight(protein):
-        '''
+        """
         This function calculates the weight of a protein
 
         Parameters
@@ -250,7 +287,7 @@ class protein:
         weight : Int
             The weight of the input protein in Da
 
-        '''
+        """
         # Removes the \n from the input string
         protein = ''.join(protein.splitlines())
         # Sets the weight integer to 0
