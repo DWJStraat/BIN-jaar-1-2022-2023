@@ -25,7 +25,7 @@ def multiple_fna(file_name):
 
     Returns
     -------
-    list : List
+    outputlist : List
         The contents of the file, in a list of strings, separated at the
         headers.
     """
