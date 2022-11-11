@@ -1,14 +1,21 @@
-def most_frequent(list):
-    '''
-    Determines the most frequent item in a list.
-    Variables:
-        list: list, the list to be used.
-    '''
-    return max(set(list), key = list.count)
-
-def multipleFna(file_name):
+def most_frequent(inputlist):
     """
-    Opens a FNA file, and returns the contents as a list of strings separated
+    Determines the most frequent item in a list.
+    parameters:
+    ----------
+    inputlist: list
+        the list to be used.
+    Returns:
+    -------
+    most_frequent: str
+        the most frequent item in the list.
+    """
+    return max(set(inputlist), key=inputlist.count)
+
+
+def multiple_fna(file_name):
+    """
+    Opens an FNA file, and returns the contents as a list of strings separated
     at the headers.
 
     Parameters
@@ -30,35 +37,48 @@ def multipleFna(file_name):
                 full_sequence += line.strip()
             else:
                 full_sequence += "\n"
-        list = full_sequence.split("\n")
-    return list
+        outputlist = full_sequence.split("\n")
+    return outputlist
 
-def consensusGenerator(list):
-    for i in range(len(list[0])):
+
+def consensus_generator(inputlist):
+    """
+    Determines the consensus sequence of a set of sequences.
+    Parameters:
+    ----------
+    inputlist: list, the list of sequences to be used.
+
+    Returns:
+    -------
+    consensus: str, the consensus sequence.
+    """
+    for i in range(len(inputlist[0])):
         column = []
-        for sequence in list:
+        for sequence in inputlist:
             column.append(sequence[i])
-        print(most_frequent(column), end = "")
+        print(most_frequent(column), end="")
 
 
-def main(training = False):
-    '''
+def main(training=False):
+    """
     Determines the consensus sequence of a set of sequences.
     Variables:
-        training: boolean, if True, the training file is used, if False, the test file is used.
-    '''
+        training: boolean, if True, the training file is used, if False, the
+        test file is used.
+    """
     # Defining the file names
     training_file = "consensus_en_profiel_training.fa"
     test_file = "consensus_en_profiel_test.fa"
-    # If training is True, the training file is used, if False, the test file is used.
-    if training == True:
+    # If training is True, the training file is used, if False, the test file
+    # is used.
+    if training is True:
         filename = training_file
     else:
         filename = test_file
     # Opening the file
-    list = multipleFna(filename)
+    output = multiple_fna(filename)
     # Determining the consensus sequence
-    consensusGenerator(list)
+    consensus_generator(output)
 
 
 main(True)
