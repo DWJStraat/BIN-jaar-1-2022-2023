@@ -15,6 +15,8 @@ import qrcode
 import cv2
 from colorama import Fore
 from colorama import Style
+
+
 # from datetime import datetime
 
 
@@ -43,10 +45,10 @@ class read:
             string = ''.join(string.splitlines())
         return string
 
-    def multipleFna(file_name):
+    def multiple_fna(file_name):
         """
-        Opens a FNA file, and returns the contents as a list of strings separated
-        at the headers.
+        Opens a FNA file, and returns the contents as a list of strings
+        separated at the headers.
 
         Parameters
         ----------
@@ -55,7 +57,7 @@ class read:
 
         Returns
         -------
-        list : List
+        outlist : List
             The contents of the file, in a list of strings, separated at the
             headers.
         """
@@ -67,9 +69,8 @@ class read:
                     full_sequence += line.strip()
                 else:
                     full_sequence += "\n"
-            list = full_sequence.split("\n")
-        return list
-
+            outlist = full_sequence.split("\n")
+        return outlist
 
     def CSV(file_name):
         teller = 0
@@ -81,7 +82,6 @@ class read:
                 csvline = line.split(',')
                 csv.append(csvline)
         return csv
-
 
     # Currently broken as I can't find a way to install RPi.GPIO on Python
     #
@@ -146,13 +146,13 @@ def counter(string, list_of_parameters):
     return count
 
 
-def agct_count(DNA):
+def agct_count(dna):
     """
     Counts the amount of A's, G's, C's and T's.
 
     Parameters
     ----------
-    string : Str
+    dna : Str
         The DNA to be examined.
 
     Returns
@@ -170,18 +170,18 @@ def agct_count(DNA):
 
     """
     # Counts A's, G's, C's and T's
-    count = counter(DNA, ['A', 'C', 'G', 'T'])
+    count = counter(dna, ['A', 'C', 'G', 'T'])
     a = count[0]
     c = count[1]
     g = count[2]
     t = count[3]
     # Calculates the length
-    length = a+g+c+t
+    length = a + g + c + t
     # Outputs the values
     return a, g, c, t, length
 
 
-class restriction_enzyme:
+class restriction_Enzyme:
     """
     This Class covers different functions that can be used to analyze DNA
     sequences, specifically about restriction enzymes.
@@ -221,11 +221,11 @@ class restriction_enzyme:
         if i > 0:
             while i > 0:
                 snip = string.find(site, nextstart)
-                output = string[start:snip-1+snipspot] + '^'
+                output = string[start:snip - 1 + snipspot] + '^'
                 snips.append(snip)
                 i = i - 1
                 nextstart = snip + snipspot
-            output = output + string[snip-1+snipspot:]
+            output = output + string[snip - 1 + snipspot:]
         else:
             # If no sites are found, outputs the input
             output = string
@@ -307,7 +307,7 @@ class protein:
         # Calculates the length of the protein and removes the weight of H2O from
         # the total weight
         length = len(protein)
-        weight = weight - (18.0153*(length-1))
+        weight = weight - (18.0153 * (length - 1))
         return weight
 
     def derk_counter(protein):
@@ -452,7 +452,7 @@ class compare:
             i += 1
 
         # Calculate overlap in %
-        overlap = compare/length*100
+        overlap = compare / length * 100
 
         # Resets the coloring after each output string so it won't stain the rest
         # of the output
@@ -497,7 +497,7 @@ class compare:
         score[:, 0] = numpy.linspace(0, -n1 * gap, n1 + 1)
         score[0, :] = numpy.linspace(0, -n2 * gap, n2 + 1)
         # Find optimal alignment
-        aligner = numpy.zeros((n1+1, n2+1))
+        aligner = numpy.zeros((n1 + 1, n2 + 1))
         aligner[:, 0] = 3
         aligner[0, :] = 4
         # Temporary scores
@@ -508,16 +508,16 @@ class compare:
                     temp[0] = score[i, j] + hit
                 else:
                     temp[0] = score[i, j] - miss
-                temp[1] = score[i, j+1] - gap
-                temp[2] = score[i+1, j] - gap
+                temp[1] = score[i, j + 1] - gap
+                temp[2] = score[i + 1, j] - gap
                 tempmax = numpy.max(temp)
-                score[i+1, j+1] = tempmax
+                score[i + 1, j + 1] = tempmax
                 if temp[0] == tempmax:
-                    aligner[i+1, j+1] += 2
+                    aligner[i + 1, j + 1] += 2
                 if temp[1] == tempmax:
-                    aligner[i+1, j+1] += 3
+                    aligner[i + 1, j + 1] += 3
                 if temp[2] == tempmax:
-                    aligner[i+1, j+1] += 4
+                    aligner[i + 1, j + 1] += 4
 
         # Find an optimal alignment
         i = n1
@@ -526,17 +526,17 @@ class compare:
         r2 = []
         while i > 0 or j > 0:
             if aligner[i, j] in [2, 5, 6, 9]:
-                r1.append(string1[i-1])
-                r2.append(string2[j-1])
+                r1.append(string1[i - 1])
+                r2.append(string2[j - 1])
                 i -= 1
                 j -= 1
             elif aligner[i, j] in [3, 5, 7, 9]:
-                r1.append(string1[i-1])
+                r1.append(string1[i - 1])
                 r2.append('-')
                 i -= 1
             elif aligner[i, j] in [4, 6, 7, 9]:
                 r1.append('-')
-                r2.append(string2[j-1])
+                r2.append(string2[j - 1])
                 j -= 1
         # Reverse the strings
         r1 = ''.join(r1)[::-1]
@@ -595,7 +595,7 @@ class identify:
             True or False
 
         '''
-        allowed = set('A'+'C'+'T'+'G')
+        allowed = set('A' + 'C' + 'T' + 'G')
         if set(seq) <= allowed:
             Is_DNA = True
         else:
@@ -605,7 +605,7 @@ class identify:
     def prime(number):
         prime = True
         if number > 1:
-            for number2 in range(2, number//2):
+            for number2 in range(2, number // 2):
                 if number % number2:
                     prime = False
         return prime
@@ -650,6 +650,7 @@ class colors:
         output = f'{Fore.RED}{Style.BRIGHT}{string}'
         return output
 
+
 # Based on class examples
 
 
@@ -676,7 +677,7 @@ def line_counter(file):
             line = line.replace("/n", "")
             print(line)
     print(counter)
-    return(counter)
+    return (counter)
 
 
 def greater_pc_percent_than(file_name, gc_perc=50):
@@ -736,9 +737,9 @@ class tutor_tasks:
         string = read.fna(file)
         # Calculates values
         A, G, C, T, length = agct_count(string)
-        GC = (G+C)/length
+        GC = (G + C) / length
         # Outputs the GC% with 2 decimals
-        GC100 = "{:.2f}".format(GC*100)
+        GC100 = "{:.2f}".format(GC * 100)
         print(f'GC% = {GC100}%')
         # Prints length
         print(f"Length = {length}")
@@ -805,7 +806,7 @@ class convert:
                 i += 1
             else:
                 try:
-                    if GPIO[i+2] == '1':
+                    if GPIO[i + 2] == '1':
                         binary.append('1')
                     else:
                         binary.append('0')
