@@ -1,0 +1,11 @@
+pat_id, med_a_mg, med_b_mg, doc
+1,10,40,Janssen
+2,20,55,Janssen
+3,10,45,Berends
+4,15,50,Janssen
+5,10,50,Janssen
+6,25,40,Berends
+7,5,65,Berends
+8,15,35,Berends
+9,15,40,Janssen
+10,10,50,Berends
