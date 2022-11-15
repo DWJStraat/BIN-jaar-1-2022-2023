@@ -5,3 +5,4 @@ David/*.pyc
 David/*.fna
 David/__pycache__/HORUS.cpython-38.pyc
 David/weektaken/output.png
+*.fna
