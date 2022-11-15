@@ -1,5 +1,5 @@
 
-import ../HORUS.py
+import HORUS
 
 fullDNA = HORUS.read.fna('gene.fna')
 

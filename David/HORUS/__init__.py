@@ -73,11 +73,22 @@ class read:
         return outlist
 
     def CSV(file_name):
-        teller = 0
+        """
+        Opens a CSV file, and returns the contents as a list of lists.
+
+        Parameters
+        ----------
+        file_name : Str
+            The path of the file to be opened.
+
+        Returns
+        -------
+        outlist : List
+            The contents of the file, in a list of lists.
+        """
         csv = []
         with open(file_name) as file:
             for line in file:
-                teller += 1
                 line = line.replace("\n", "")
                 csvline = line.split(',')
                 csv.append(csvline)
