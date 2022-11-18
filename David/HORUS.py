@@ -20,10 +20,10 @@ from colorama import Style
 # from datetime import datetime
 
 
-class read:
+class Read:
     def fna(file_name):
         """
-        Opens a FNA file, and returns the contents as a single string.
+        Opens an FNA file, and returns the contents as a single string.
 
         Parameters
         ----------
@@ -192,7 +192,7 @@ def agct_count(dna):
     return a, g, c, t, length
 
 
-class restriction_Enzyme:
+class RestrictionEnzyme:
     """
     This Class covers different functions that can be used to analyze DNA
     sequences, specifically about restriction enzymes.
@@ -243,47 +243,47 @@ class restriction_Enzyme:
 
         return output, snips
 
-    def cutter(DNA, enzymfile):
+    def cutter(dna, enzymfile):
         """
-        A function that can be used to process restriction enzymes found in a txt
-        file on a string of DNA
+        A function that can be used to process restriction enzymes found in
+        a txt file on a string of DNA
 
         Parameters
         ----------
-        DNA : The string of DNA to be analyzed
-        enzymfile : The txt file containing the names of the restriction enzymes
-                    and their restriction site.
+        dna : The string of DNA to be analyzed
+        enzymfile : The txt file containing the names of the restriction
+                    enzymes and their restriction site.
                     Example of formatting: DdeI C^TGAG
 
         Returns
         -------
-        cutDNA : The DNA after having been cut by the restriction enzymes entered,
-                 in list format
+        cutdna : The DNA after having been cut by the restriction enzymes
+                 entered, in list format
         cuttingenzymes : The enzymes that cut the DNA, in list format
 
         """
 
         with open(enzymfile) as bestand:
-            string = DNA
+            string = dna
             cuttingenzymes = []
             read = True
-            while read == True:
+            while read:
                 line = bestand.readline().strip()
                 if line != '':
                     enzym, seq = line.split()
                     site = seq
                     site = site.replace("^", "")
-                    sites = DNA.count(site)
+                    sites = dna.count(site)
                     if sites > 0:
                         string = string.replace(site, seq)
                         cuttingenzymes.append(enzym)
                 else:
                     read = False
-            cutDNA = string.split("^")
-        return cutDNA, cuttingenzymes
+            cutdna = string.split("^")
+        return cutdna, cuttingenzymes
 
 
-class protein:
+class Protein:
     def weight(protein):
         """
         This function calculates the weight of a protein
@@ -315,14 +315,14 @@ class protein:
         # weight variable
         for i in protein:
             weight += table[i]
-        # Calculates the length of the protein and removes the weight of H2O from
-        # the total weight
+        # Calculates the length of the protein and removes the weight of H2O
+        # from the total weight
         length = len(protein)
         weight = weight - (18.0153 * (length - 1))
         return weight
 
     def derk_counter(protein):
-        '''
+        """
 
 
         Parameters
@@ -345,7 +345,7 @@ class protein:
         charge : Int
             The charge of the protein, based on the D, E, R, and K counts.
 
-        '''
+        """
         count = counter(protein, ['D', 'E', 'R', 'K'])
         d = count[0]
         e = count[1]
@@ -358,7 +358,7 @@ class protein:
 
 class QR:
     def generator(string, name):
-        '''
+        """
         This function generates a QR code based on the input in the working
         directory
         Uses qrcode
@@ -374,13 +374,13 @@ class QR:
         -------
         None.
 
-        '''
+        """
         img = qrcode.make(string)
         type(img)
         img.save(f'{name}.png')
 
     def read(name):
-        '''
+        """
         This function reads a QR code and outputs as a string
         Uses cv2
 
@@ -394,20 +394,19 @@ class QR:
         string : Str
             Output in string format
 
-        '''
+        """
 
         image = cv2.imread(name)
         detect = cv2.QRCodeDetector()
-        string, points, qrcode = detect.detectAndDecode(image)
+        string, points, qr = detect.detectAndDecode(image)
         return string
 
 
-class compare:
+class Compare:
     def compare(string1, string2):
-        '''
-        Compares two strings, colors the overlapping characters green, the others
-        red, and calculates the overlap in %
-        Uses Colorama
+        """
+        Compares two strings, colors the overlapping characters green,
+        the others red, and calculates the overlap in % Uses Colorama
 
         Parameters
         ----------
@@ -425,7 +424,7 @@ class compare:
         overlap : Int
             The overlap in %
 
-        '''
+        """
         # Setting some empty variables
         out1 = ''
         out2 = ''
@@ -435,26 +434,27 @@ class compare:
         length = max(len(string1), len(string2))
         # Loops through each character in the strings
         while i < length:
-            # If one string is shorter than the other, it'll compensate with -'s
-            # to prevent a 'string index out of range'
+            # If one string is shorter than the other, it'll compensate with
+            # -'s to prevent a 'string index out of range'
             try:
                 v1 = string1[i]
-            except:
+            except IndexError:
                 v1 = "-"
             try:
                 v2 = string2[i]
-            except:
+            except IndexError:
                 v2 = "-"
 
-            # If the character in both strings is the same, puts that character in
-            # the output strings in green, and adds 1 to the Compare variable
+            # If the character in both strings is the same, puts that
+            # character in the output strings in green, and adds 1 to the
+            # Compare variable
             if max(v1, v2) == min(v1, v2):
                 out1 = out1 + colors.green(v1)
                 out2 = out2 + colors.green(v2)
                 compare += 1
 
-            # If they are not the same, puts that character in the output strings
-            # in red.
+            # If they are not the same, puts that character in the output
+            # strings in red.
             else:
                 out1 = out1 + colors.red(v1)
                 out2 = out2 + colors.red(v2)
@@ -465,19 +465,19 @@ class compare:
         # Calculate overlap in %
         overlap = compare / length * 100
 
-        # Resets the coloring after each output string so it won't stain the rest
-        # of the output
+        # Resets the coloring after each output string so it won't stain the
+        # rest of the output
         out1 = out1 + f'{Style.RESET_ALL}'
         out2 = out2 + f'{Style.RESET_ALL}'
 
         return out1, out2, overlap
 
     def aligner(string1, string2, hit=1, miss=1, gap=1):
-        '''
-        This piece of code runs a simplified version of the Needleman-Wunsch 
+        """
+        This piece of code runs a simplified version of the Needleman-Wunsch
         algorithm
 
-        Credit to slowkow ( profile: https://gist.github.com/slowkow ) for his 
+        Credit to slowkow ( profile: https://gist.github.com/slowkow ) for his
         original code
 
         Parameters
@@ -500,7 +500,7 @@ class compare:
         r2 : Str
             The second string, aligned with the first.
 
-        '''
+        """
         n1 = len(string1)
         n2 = len(string2)
         # Score for each possible pair of characters
@@ -555,13 +555,13 @@ class compare:
         return r1, r2
 
     def duploremover(a, b):
-        '''
+        """
         A function that removes elements found in both lists and return a list
         containing all unique values
 
         Parameters
         ----------
-        a : List 
+        a : List
             First list to be analyzed
         b : List
             Second list to be analyzed
@@ -570,7 +570,7 @@ class compare:
         pile : List
             A list containing only the unique values
 
-        '''
+        """
         pile = a + b
         pile = list(dict.fromkeys(pile))
         aset = set(a)
@@ -592,7 +592,7 @@ def sentinel():
 class identify:
 
     def dna(seq):
-        '''
+        """
         Checks if the input string is DNA
 
         Parameters
@@ -602,18 +602,31 @@ class identify:
 
         Returns
         -------
-        Is_DNA : Bool
+        is_dna : Bool
             True or False
 
-        '''
+        """
         allowed = set('A' + 'C' + 'T' + 'G')
         if set(seq) <= allowed:
-            Is_DNA = True
+            is_dna = True
         else:
-            Is_DNA = False
-        return Is_DNA
+            is_dna = False
+        return is_dna
 
     def prime(number):
+        """
+        Checks if the input number is prime
+
+        Parameters
+        ----------
+        number : Int
+            Input number
+
+        Returns
+        -------
+        Is_Prime : Bool
+            True or False
+        """
         prime = True
         if number > 1:
             for number2 in range(2, number // 2):
@@ -624,7 +637,7 @@ class identify:
 
 class colors:
     def green(string):
-        '''
+        """
         Makes input bright green
         Uses Colorama
 
@@ -638,26 +651,26 @@ class colors:
         output : Str
             Green output string
 
-        '''
+        """
         output = f'{Fore.GREEN}{Style.BRIGHT}{string}'
         return output
 
     def red(string):
-        '''
+        """
         Makes input bright red
         Uses Colorama
 
         Parameters
         ----------
         string : Str
-            Input 
+            Input
 
         Returns
         -------
         output : Str
             Red output string
 
-        '''
+        """
         output = f'{Fore.RED}{Style.BRIGHT}{string}'
         return output
 
@@ -666,7 +679,7 @@ class colors:
 
 
 def line_counter(file):
-    '''
+    """
     This function is based on the code given as an example for the first
     function in the first programming test in the year 2022-2023
 
@@ -676,24 +689,24 @@ def line_counter(file):
 
     Returns
     -------
-    counter : Returns the number of lines.
+    lines : Returns the number of lines.
 
-    '''
-    counter = -1
+    """
+    lines = -1
     with open(file) as opened_file:
         # For every line in the file, increases the counter by 1 and prints the
         # line
         for line in opened_file:
-            counter += 1
+            lines += 1
             line = line.replace("/n", "")
             print(line)
-    print(counter)
-    return (counter)
+    print(lines)
+    return lines
 
 
 def greater_pc_percent_than(file_name, gc_perc=50):
-    '''
-    Calculates how many of the genes in the file provided have a gc% higher 
+    """
+    Calculates how many of the genes in the file provided have a gc% higher
     than the percentage given
 
     Parameters
@@ -708,7 +721,7 @@ def greater_pc_percent_than(file_name, gc_perc=50):
     number_of_genes_higher_gc : Int
         The amount of genes above the gc_perc.
 
-    '''
+    """
     number_of_genes_higher_gc = 0
     with open(file_name) as file:
         first_line = file.readline()
@@ -733,7 +746,7 @@ def primerDesign(fulldna, codingdna, mintemp=50, maxtemp=65, maxtemprange=4,
     """
     Design a primer for the DNA provided
 
-        Parameters
+    Parameters
     ----------
     fullDNA : str
         The DNA sequence to be used
@@ -786,6 +799,13 @@ def primerDesign(fulldna, codingdna, mintemp=50, maxtemp=65, maxtemprange=4,
             primerreverse += intron_dna[1][i]
             counterforward += 1
             counterreverse += 1
+            if counterforward == maxsize or counterreverse == maxsize:
+                break
+            if counterforward > minsize and counterreverse > minsize:
+                if primertempforward > mintemp and primertempreverse > mintemp:
+                    if primertempforward < maxtemp and \
+                            primertempreverse < maxtemp:
+                        break
         else:
             if primertempforward < primertempreverse:
                 primertempforward += temperature[intron_dna[0][i]]
@@ -803,9 +823,10 @@ def primerDesign(fulldna, codingdna, mintemp=50, maxtemp=65, maxtemprange=4,
     primerforward = primerforward[::-1]
     return primerforward, primerreverse, primertempforward, primertempreverse
 
+
 class tutor_tasks:
     def weekopdracht_2(file):
-        '''
+        """
         This function takes the input file, and prints the GC% and length
 
         Parameters
@@ -817,12 +838,12 @@ class tutor_tasks:
         GC100 : The GC% of the gene in the FASTA file, in %
         length: The length of the gene in the FASTA file.
 
-        '''
+        """
         # Reads FNA file
-        string = read.fna(file)
+        string = Read.fna(file)
         # Calculates values
-        A, G, C, T, length = agct_count(string)
-        GC = (G + C) / length
+        a, g, c, T, length = agct_count(string)
+        GC = (g + c) / length
         # Outputs the GC% with 2 decimals
         GC100 = "{:.2f}".format(GC * 100)
         print(f'GC% = {GC100}%')
@@ -831,7 +852,7 @@ class tutor_tasks:
         return GC100, length
 
     def weekopdracht_3(file):
-        '''
+        """
         This function takes the input file, and prints the D, E, R, K and
         length
 
@@ -851,9 +872,9 @@ class tutor_tasks:
         rp : the percentage of R amino acids in the protein
         kp : the percentage of K amino acids in the protein
         charge: the charge of the protein
-        '''
-        string = read.fna(file)
-        d, e, r, k, length, charge = protein.derk_counter(string)
+        """
+        string = Read.fna(file)
+        d, e, r, k, length, charge = Protein.derk_counter(string)
         dp = d / length
         ep = e / length
         rp = r / length
@@ -864,34 +885,34 @@ class tutor_tasks:
         return length, d, e, r, k, dp, ep, rp, kp, charge
 
     def weektaak_4(file):
-        string = read.fna(file)
-        weight = protein.weight(string)
+        string = Read.fna(file)
+        weight = Protein.weight(string)
         return weight
 
 
 class convert:
-    def gpio_to_binary(GPIO):
-        '''
+    def gpio_to_binary(gpio):
+        """
         This code converts GPIO input to binary, with the assumption that 101
         = 1 and 100 = 0
 
         Parameters
         ----------
-        GPIO : GPIO input
+        gpio : GPIO input
 
         Returns
         -------
         binary : binary string
 
-        '''
+        """
         i = 0
         binary = []
-        while i < len(GPIO):
-            if GPIO[i] == '0':
+        while i < len(gpio):
+            if gpio[i] == '0':
                 i += 1
             else:
                 try:
-                    if GPIO[i + 2] == '1':
+                    if gpio[i + 2] == '1':
                         binary.append('1')
                     else:
                         binary.append('0')
@@ -902,7 +923,7 @@ class convert:
         return binary
 
     def binary_to_text(binary):
-        '''
+        """
         Converts binary input to string through the ASCII format.
 
         Parameters
@@ -913,7 +934,7 @@ class convert:
         -------
         text : string
 
-        '''
+        """
         binint = int(binary, 2)
         byte = binint.bit_length() + 7 // 8
         binarray = binint.to_bytes(byte, 'big')
