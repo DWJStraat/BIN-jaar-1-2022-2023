@@ -786,19 +786,28 @@ def primerDesign(fulldna, codingdna, mintemp=50, maxtemp=65, maxtemprange=4,
     intron_dna[0] = intron_dna[0][::-1]
 
     primertempforward = 0
+    gcforward = 0
     counterforward = 0
     primerforward = ''
     primertempreverse = 0
+    gcreverse = 0
     counterreverse = 0
     primerreverse = ''
     for i in range(startingpos, min(len(intron_dna[0]), len(intron_dna[1]))):
         if abs(primertempforward - primertempreverse) < maxtemprange:
+            # Forward primer
             primertempforward += temperature[intron_dna[0][i]]
             primerforward += reverse[intron_dna[0][i]]
+            if intron_dna[0][i] == 'G' or intron_dna[0][i] == 'C':
+                gcforward += 1
+            counterforward += 1
+            # Reverse primer
             primertempreverse += temperature[intron_dna[1][i]]
             primerreverse += intron_dna[1][i]
-            counterforward += 1
+            if intron_dna[1][i] == 'G' or intron_dna[1][i] == 'C':
+                gcreverse += 1
             counterreverse += 1
+
             if counterforward == maxsize or counterreverse == maxsize:
                 break
             if counterforward > minsize and counterreverse > minsize:

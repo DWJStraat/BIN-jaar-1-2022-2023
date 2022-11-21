@@ -6,9 +6,9 @@ sys.path.append(os.path.dirname(SCRIPT_DIR))
 
 import HORUS
 
-fullDNA = HORUS.Read.fna('gene.fna')
+fullDNA = HORUS.Read.fna('sequence.fna')
 
-CodingDNA = HORUS.Read.fna('coding.fna')
+CodingDNA = HORUS.Read.fna('codingsequence.fna')
 
 a1, a2, b1, b2 = HORUS.primerDesign(fullDNA, CodingDNA, maxtemprange=2,
                                     minsize=18, maxtemp=62)
