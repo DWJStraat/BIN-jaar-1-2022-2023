@@ -1,6 +1,5 @@
 # importeer de twee dictionaries vanuit de translation.py
 from translation import code
-from translation import aa3
 
 
 def Opdracht2(dna):
@@ -42,48 +41,49 @@ def Opdracht3(dna):
         eiwit sequentie
     """
     run = True
-    prot = ''
-    dna = dna.lower()
-    start = dna.count('atg')
-    while run == True:
-        while start > 0:
-            startpost = dna.find('atg')
-            post = startpost
-            while post < len(dna):
-                codon = dna[post:post + 3]
-                try:
-                    if code[codon] == '*':
-                        start = start -1
-                        stoppos = post + 3
-                        prot += '\t'
-                        dna = dna[stoppos:]
-                        break
-                except KeyError:
-                    run = False
-                else:
-                    try:
-                        prot += code[codon]
-                        post += 3
-                    except KeyError:
-                        break
-    return prot
+    protein_list = []
+    starts = dna.count('ATG')
+    while starts > 0:
+        prot = ''
+        start = dna.find('ATG')
+        temporary_dna = dna[start:]
+        while run:
+            try:
+                codon = temporary_dna[0:3].lower()
+                if code[codon] == '*':
+                    if prot != '':
+                        protein_list.append(prot)
+                    break
+                prot += code[codon]
+                temporary_dna = temporary_dna[3:]
+            except KeyError:
+                run = False
+        dna = dna[start + 3:]
+        starts -= 1
+
+    return protein_list
 
 
 def main(opdracht):
     """
-    Deze functie vertaald een DNA sequentie naar een eiwit sequentie
+    Deze functie vertaald een DNA-sequentie naar een eiwit sequentie
 
     Parameters
     ----------
     opdracht : int
         welke opdracht moet worden uitgevoerd. Keuze uit 2 en 3
     """
-    dna = "AGCCATGTAGCTAACTCAGGTTACATGGGGATGACCCCGCGACTTGGATTAGAGTCTCTTTTGGAA\
-    TAAGCCTGAATGATCCGAGTAGCATCTCAG"
+    dna = "AGCCATGTAGCTAACTCAGGTTACATGGGGATGACCCCGCGACTTGGATTAGAGTCTC" \
+          "TTTTGGAATAAGCCTGAATGATCCGAGTAGCATCTCAG "
+    complementary_dna = "TCGGTACATCGATTGAGTCCAATGTACCCCTACTGGGGCGCTG" \
+                        "AACCTAATCTCAGAGAAAACCTTATTCGGACTTACTAGGCTCA" \
+                        "TCGTAGAGTC "
+    complementary_dna = complementary_dna[:: -1]
     if opdracht == 2:
         print(Opdracht2(dna))
     elif opdracht == 3:
-        print(Opdracht3(dna))
+        print(f'Forward:{Opdracht3(dna)}')
+        print(f'Reverse:{Opdracht3(complementary_dna)}')
     else:
         print("Geen geldige opdracht gekozen")
 
