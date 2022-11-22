@@ -1,6 +1,5 @@
 import random
 import tabulate
-import time
 
 def generateBingoCard(maxno = 100, collumn = 5, row = 5, freeslot = True, freex = 2, freey = 2):
     card = []
@@ -19,12 +18,12 @@ def generateBingoCard(maxno = 100, collumn = 5, row = 5, freeslot = True, freex 
     return card
 
 def main(cards = 1):
-    file = open(f'Bingocard {time.strftime("%d-%m-%Y %H-%M-%S")}.txt', 'w')
+    file = open(f'Bingocard.txt', 'w')
     for i in range(cards):
         print(tabulate.tabulate(generateBingoCard(), tablefmt="grid"))
         file.write(tabulate.tabulate(generateBingoCard(), tablefmt="grid"))
         print("")
-        file.write("~~~")
-    file.close
+        file.write("\n\n\n")
+    file.close()
 
 main(3)
