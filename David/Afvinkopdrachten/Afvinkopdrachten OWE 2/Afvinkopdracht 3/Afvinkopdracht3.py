@@ -47,7 +47,7 @@ def Opdracht3(dna):
         prot = ''
         start = dna.find('ATG')
         temporary_dna = dna[start:]
-        while run:
+        while True:
             try:
                 codon = temporary_dna[0:3].lower()
                 if code[codon] == '*':
@@ -57,7 +57,7 @@ def Opdracht3(dna):
                 prot += code[codon]
                 temporary_dna = temporary_dna[3:]
             except KeyError:
-                run = False
+                break
         dna = dna[start + 3:]
         starts -= 1
 
