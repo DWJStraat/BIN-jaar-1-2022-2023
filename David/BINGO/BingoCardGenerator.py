@@ -18,7 +18,7 @@ def generateBingoCard(maxno = 100, collumn = 5, row = 5, freeslot = True, freex 
     return card
 
 def main(cards = 1):
-    file = open(f'Bingocard.txt', 'w')
+    file = open(f'../Bingocard.txt', 'w')
     for i in range(cards):
         card = generateBingoCard()
         print(tabulate.tabulate(card, tablefmt="grid"))

@@ -740,97 +740,109 @@ def greater_pc_percent_than(file_name, gc_perc=50):
 
 
 # CSV_Reader: See read.CSV
+class Primer:
+    def Design(fulldna, codingdna, mintemp=50, maxtemp=65, maxtemprange=4,
+               minsize=18, maxsize=25, startingpos=0):
+        """
+        Design a primer for the DNA provided
 
-def primerDesign(fulldna, codingdna, mintemp=50, maxtemp=65, maxtemprange=4,
-                 minsize=18, maxsize=25, startingpos=0):
-    """
-    Design a primer for the DNA provided
+        Parameters
+        ----------
+        fulldna : str
+            The DNA sequence to be used
+        codingdna : str
+            The coding part of the DNA sequence
+        mintemp : int
+            The minimum temperature of the primer
+        maxtemp : int
+            The maximum temperature of the primer
+        maxtemprange : int
+            The maximum temperature range of the primer
+        minsize : int
+            The minimum size of the primer
+        maxsize : int
+            The maximum size of the primer
+        startingpos : int
+            The starting position of the primer
 
-    Parameters
-    ----------
-    fullDNA : str
-        The DNA sequence to be used
-    codingdna : str
-        The coding part of the DNA sequence
-    mintemp : int
-        The minimum temperature of the primer
-    maxtemp : int
-        The maximum temperature of the primer
-    maxtemprange : int
-        The maximum temperature range of the primer
-    minsize : int
-        The minimum size of the primer
-    maxsize : int
-        The maximum size of the primer
-    startingpos : int
-        The starting position of the primer
+        Returns
+        -------
+        primerforward: str
+            The forward primer, returned in format 5' [] 3'
+        primerreverse: str
+            The reverse primer, returned in format 5' [] 3'
+        primertempforward: int
+            The temperature of the forward primer
+        primertempreverse: int
+            The temperature of the reverse primer
+        """
 
-    Returns
-    -------
-    primerforward: str
-        The forward primer, returned in format 5' [] 3'
-    primerreverse: str
-        The reverse primer, returned in format 5' [] 3'
-    primertempforward: int
-        The temperature of the forward primer
-    primertempreverse: int
-        The temperature of the reverse primer
-    """
+        intron_dna = fulldna.replace(codingdna, '\n')
 
-    temperature = {'A': 2, 'T': 2, 'G': 4, 'C': 4}
-    reverse = {'A': 'T', 'T': 'A', 'G': 'C', 'C': 'G'}
-    intron_dna = fulldna.replace(codingdna, '\n')
+        intron_dna = intron_dna.split('\n')
+        forwardsize = minsize
+        reversesize = minsize
 
-    intron_dna = intron_dna.split('\n')
-
-    intron_dna[0] = intron_dna[0][::-1]
-
-    primertempforward = 0
-    gcforward = 0
-    counterforward = 0
-    primerforward = ''
-    primertempreverse = 0
-    gcreverse = 0
-    counterreverse = 0
-    primerreverse = ''
-    for i in range(startingpos, min(len(intron_dna[0]), len(intron_dna[1]))):
-        if abs(primertempforward - primertempreverse) < maxtemprange:
-            # Forward primer
-            primertempforward += temperature[intron_dna[0][i]]
-            primerforward += reverse[intron_dna[0][i]]
-            if intron_dna[0][i] == 'G' or intron_dna[0][i] == 'C':
-                gcforward += 1
-            counterforward += 1
-            # Reverse primer
-            primertempreverse += temperature[intron_dna[1][i]]
-            primerreverse += intron_dna[1][i]
-            if intron_dna[1][i] == 'G' or intron_dna[1][i] == 'C':
-                gcreverse += 1
-            counterreverse += 1
-
-            if counterforward == maxsize or counterreverse == maxsize:
-                break
-            if counterforward > minsize and counterreverse > minsize:
-                if primertempforward > mintemp and primertempreverse > mintemp:
-                    if primertempforward < maxtemp and \
-                            primertempreverse < maxtemp:
-                        break
-        else:
-            if primertempforward < primertempreverse:
-                primertempforward += temperature[intron_dna[0][i]]
-                primerforward += reverse[intron_dna[0][i]]
-                counterforward += 1
+        intron_dna[0] = intron_dna[0][::-1]
+        run = True
+        while run:
+            primerforward, tempforward, forwardgc, forwardconform = Primer.Calc(
+                intron_dna[0][startingpos:startingpos + forwardsize])
+            primerreverse, tempreverse, reversegc, reverseconform = Primer.Calc(
+                intron_dna[1][startingpos:startingpos + reversesize])
+            if forwardconform == [] and reverseconform == [] and abs(tempforward - tempreverse) <= maxtemprange:
+                run = False
             else:
-                primertempreverse += temperature[intron_dna[1][i]]
-                primerreverse += intron_dna[1][i]
-                counterreverse += 1
-        if primertempforward + 4 >= maxtemp or \
-                primertempreverse + 4 >= maxtemp:
-            break
-        if counterforward >= maxsize or counterreverse >= maxsize:
-            break
-    primerforward = primerforward[::-1]
-    return primerforward, primerreverse, primertempforward, primertempreverse
+                if forwardconform == [] and primerreverse < maxsize:
+                    reversesize += 1
+                elif reverseconform == [] and primerforward < maxsize:
+                    forwardsize += 1
+
+        # if abs(primertempforward - primertempreverse) <= maxtemprange:
+        #     if forwardlength == maxsize or reverselength == maxsize:
+        #
+        #     if forwardlength > minsize and reverselength > minsize:
+        #          if primertempforward > mintemp and primertempreverse > mintemp:
+        #              if primertempforward < maxtemp and \
+        #                      primertempreverse < maxtemp:
+        #     else:
+        #         if primertempforward < primertempreverse:
+        #             primertempforward += temperature[intron_dna[0][i]]
+        #             primerforward += reverse[intron_dna[0][i]]
+        #             forwardlength += 1
+        #         else:
+        #             primertempreverse += temperature[intron_dna[1][i]]
+        #             primerreverse += intron_dna[1][i]
+        #             reverselength += 1
+        #     if primertempforward + 4 >= maxtemp or \
+        #             primertempreverse + 4 >= maxtemp:
+        #     if forwardlength >= maxsize or len(primerreverse) >= maxsize:
+        # gcpercentforward = gcforward / len(primerforward) * 100
+        # gcpercentreverse = gcreverse / len(primerreverse) * 100
+        # primerforward = primerforward[::-1]
+        return primerforward, primerreverse, tempforward, \
+               tempreverse, forwardgc, reversegc
+
+    def Calc(dna, gc_max=0.6, gc_min=0.4, temp_max=65, temp_min=50,
+             length_max=25, length_min=18):
+        primer_temperature = 0
+        gc_count = 0
+        primer = ''
+        conform = []
+        temperature = {'A': 2, 'T': 2, 'G': 4, 'C': 4}
+        reverse = {'A': 'T', 'T': 'A', 'G': 'C', 'C': 'G'}
+        for i in dna:
+            primer_temperature += temperature[i]
+            primer += reverse[i]
+            if i == 'G' or i == 'C':
+                gc_count += 1
+        if not gc_min < gc_count / len(primer) < gc_max:
+            conform.append('GC')
+        if not temp_min < primer_temperature < temp_max:
+            conform.append('Temperature')
+        if not length_min < len(primer) < length_max:
+            conform.append('Length')
+        return primer, primer_temperature, gc_count, conform
 
 
 class tutor_tasks:
