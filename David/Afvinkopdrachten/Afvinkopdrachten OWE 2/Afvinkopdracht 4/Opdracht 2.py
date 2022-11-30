@@ -1,7 +1,6 @@
 import re
 import gzip
 import datetime
-import pickle
 
 
 def read_gzip_multiple_fna(path):
@@ -108,16 +107,8 @@ def iterate_and_consensus(gene_list):
 
 def main():
     start_time = datetime.datetime.now()
-    loadfile = input('Would you like to load the file?\nIf not, the script '
-                     'will resume with the last file.\n(y/n) ')
     print('Start time:', start_time)
-    if loadfile == 'y':
-        gene_list = multiple_fna("Mus_musculus.GRCm38.pep.all.fa")
-        with open('gene_list.dat', 'wb') as file:
-            pickle.dump(gene_list, file)
-    elif loadfile == 'n':
-        with open('genelist.dat', 'rb') as file:
-            gene_list = pickle.load(file)
+    gene_list = multiple_fna("Mus_musculus.GRCm38.pep.all.fa")
     print('Gene list created after:', datetime.datetime.now() - start_time)
     iterate_and_consensus(gene_list)
     print('Done!')
