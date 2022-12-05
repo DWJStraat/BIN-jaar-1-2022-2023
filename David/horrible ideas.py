@@ -24,6 +24,7 @@ def panicPopUp():
         showwarning('PANIC!', 'A' * random.randint(1, 100000))
         i += random.randint(-5, 5)
 
+
 def neverGonnaGiveYouUp(integer):
     """
     Opens an amount of tabs with the Rick Astley video "Never Gonna Give You Up".
