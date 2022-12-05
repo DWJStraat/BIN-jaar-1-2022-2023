@@ -3,7 +3,6 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import filedialog as fd
 from tkinter.messagebox import showinfo
-import sys
 
 
 class fasta:
@@ -78,7 +77,8 @@ def select_file():
     """
     filename = fd.askopenfilename(
         title='Open a file'
-        # initialdir=r'C:\Users\dstra\OneDrive - HAN\Projectgroep_9\Eno1_FASTAs'
+        # initialdir=r'C:\Users\dstra\OneDrive -
+        # HAN\Projectgroep_9\Eno1_FASTAs'
     )
     return filename
 
@@ -131,7 +131,14 @@ def backend():
             highestgcobject = j
     showinfo(
         title='Highest GC content',
-        message=f'The sequence with the highest GC content is \n{highestgcobject.getHeader()}\n with a GC content of {highestgc*100:.2f}%')
+        message=f'The sequence with the highest GC content is \n'
+                f'{highestgcobject.getHeader()}\n with a GC content'
+                f' of {highestgc*100:.2f}%')
+    highestgcobjectdna = DNA(highestgcobject.getSequence())
+    print(f'Header: {highestgcobject.getHeader()}\nGC percentage: '
+          f'{highestgc*100:.2f}%\nTranscript: '
+          f'{highestgcobjectdna.getTranscript()}\nLength: '
+          f'{highestgcobjectdna.getLength()}')
 
 
 
