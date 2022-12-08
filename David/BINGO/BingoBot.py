@@ -1,6 +1,7 @@
 import random
 import pandas as pd
 import matplotlib.pyplot as plt
+import pickle as pkl
 
 
 class Bingo:
@@ -93,6 +94,14 @@ class Bingo:
             self.row = int(row)
         except ValueError:
             print("Please enter a number")
+
+    def save(self):
+        with open(f'bingo {self.name}', 'wb') as f:
+            pkl.dump(self, f)
+
+    def load(self):
+        with open(f'bingo {self.name}', 'rb') as f:
+            return pkl.load(f)
 
 
 a = Bingo("David")

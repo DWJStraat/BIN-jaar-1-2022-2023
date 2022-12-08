@@ -77,7 +77,10 @@ def bingoRemove(filename='bingo.dat', numbers=None):
         numbers = []
     bingo = pickle.load(open(filename, 'rb'))
     for number in numbers:
-        bingo.remove(number)
+        try:
+            bingo.remove(number)
+        except:
+            pass
     pickle.dump(bingo, open(filename, 'wb'))
 
 
@@ -118,4 +121,3 @@ def bingoSave(filename='bingo.dat', numbers=None):
         numbers = []
     pickle.dump(numbers, open(filename, 'wb'))
 
-print(bingoDraw(runs=6))
