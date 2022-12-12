@@ -1,6 +1,9 @@
 import discord
 from discord import app_commands
 import Afvinkopdracht5_class as a5
+import json
+
+json = json.load(open('config.json'))
 
 
 class BinfFive(discord.Client):
@@ -60,4 +63,4 @@ async def analyze(interaction: discord.Interaction):
 
 
 client.run(
-    'MTA0OTk3NzA5ODUxODkzNzY4MA.G6HNDi.gKkbyzpI-DX87CQAoOjZ6LUrumLYdJ8v2BYptk')
+    json['token'])
