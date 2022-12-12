@@ -1,6 +1,7 @@
 import re
 import time
 
+
 def read_fna(file_name):
     """
     Opens a FNA file, and returns the contents as a single string.
@@ -45,6 +46,7 @@ def dna_check_regex(string):
     x = re.search('^[ATCGN]*$', string)
     return x
 
+
 def dna_check_iterate(string):
     """
     Checks if a string is a valid DNA sequence.
@@ -66,6 +68,7 @@ def dna_check_iterate(string):
             return False
     return True
 
+
 def main():
     start = time.time()
     fna = read_fna("Mus_musculus.GRCm38.dna.chromosome.1.fa")
@@ -81,4 +84,6 @@ def main():
     print("Regex: ", endregex - startregex)
     print("Iterate: ", enditerate - startiterate)
     print('FNA: ', endfna - start)
+
+
 main()
