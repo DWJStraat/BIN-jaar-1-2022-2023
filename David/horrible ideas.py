@@ -41,3 +41,22 @@ def neverGonnaGiveYouUp(integer):
     while integer > 0:
         webbrowser.open('https://www.youtube.com/watch?v=dQw4w9WgXcQ')
         integer -= 1
+
+
+def brrrrrr(num):
+    """
+    Will run itself n^num times. Will crash your computer if num is too high.
+
+    Parameters
+    ----------
+    num : int
+
+    Returns
+    -------
+    None
+    """
+    print(num)
+    num -= 1
+    if num > 0:
+        brrrrrr(num)
+        brrrrrr(num)
