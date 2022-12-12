@@ -2,6 +2,7 @@ import random
 import pandas as pd
 import matplotlib.pyplot as plt
 import pickle as pkl
+from PIL import Image
 
 
 class Bingo:
@@ -55,22 +56,19 @@ class Bingo:
             draws.append(number)
         return draws
 
-    @property
     def generateCard(self):
         """
         Generates a bingo card
         """
         card = []
+        numbers = self.numbers
         random.seed = self.seed
         for i in range(self.column):
             card.append([])
             for j in range(self.row):
-                number = random.choice(self.numbers)
-                self.numbers.remove(number)
+                number = random.choice(numbers)
                 card[i].append(number)
         fig, ax = plt.subplots()
-
-        # hide axes
         fig.patch.set_visible(False)
         ax.axis('off')
         ax.axis('tight')
@@ -84,9 +82,10 @@ class Bingo:
         table.set_fontsize(40)
         table.scale(4, 4)
         fig.tight_layout()
-        plt.show()
+        plt.savefig(f'card_{self.name}_{self.seed}.jpg')
+        seed = self.seed
         self.seed += 1
-        return card
+        return card, seed
 
     def settings(self, column, row):
         try:
@@ -95,16 +94,40 @@ class Bingo:
         except ValueError:
             print("Please enter a number")
 
+    def createGame(self):
+        self.settings(5, 5)
+        self.generateList(100)
+
     def save(self):
-        with open(f'bingo {self.name}', 'wb') as f:
-            pkl.dump(self, f)
+        """
+        Saves the game to a pickle file
+        """
+        dict =  self.__dict__
+        with open(f'{self.name}.bingo', 'wb') as f:
+            pkl.dump(dict, f)
 
     def load(self):
-        with open(f'bingo {self.name}', 'rb') as f:
-            return pkl.load(f)
+        """
+        Loads the game from a pickle file
+        """
+        with open(f'{self.name}.bingo', 'rb') as f:
+            dict = pkl.load(f)
+        self.__dict__ = dict
+
+    def printNumbers(self):
+        return self.numbers
+
+def main():
+    game = Bingo('test')
+    print('Creating game')
+    game.createGame()
+    print('Saving game')
+    game.save()
+    print('Loading game')
+    game.load()
+    game.generateCard()
+    im = Image.open('card1.jpg')
+    im.show()
+    return game
 
 
-a = Bingo("David")
-a.generateList(100)
-a.settings(5, 5)
-print(a.generateCard)
