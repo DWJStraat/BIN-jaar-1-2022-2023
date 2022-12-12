@@ -24,7 +24,7 @@ def panicPopUp():
         frequency = random.randint(1500, 4000)
         duration = random.randint(100, 1000)
         ws.Beep(frequency, duration)
-        showwarning('PANIC!', 'A' * random.randint(1, 100000))
+        showwarning('PANIC!', 'A' * random.randint(1, 1000))
         i += random.randint(-5, 5)
 
 

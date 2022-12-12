@@ -1,65 +1,8 @@
-import re
 import tkinter as tk
 from tkinter import ttk
 from tkinter import filedialog as fd
 from tkinter.messagebox import showinfo
-
-
-class fasta:
-
-    def __init__(self):
-        self.header = None
-        self.sequence = None
-        self.type = None
-
-    def setHeader(self, header):
-        if header.startswith('>') and not header.isdigit():
-            self.header = header
-        else:
-            print('Invalid header')
-
-    def getHeader(self):
-        return self.header
-
-    def setSequence(self, sequence):
-        if re.search('^[AGCTN]*$', sequence):
-            self.sequence = sequence
-        else:
-            print('Invalid DNA sequence')
-
-    def getSequence(self):
-        return self.sequence
-
-
-class DNA:
-    def __init__(self, sequence):
-        self.sequence = sequence
-
-    def setDNA(self, sequence):
-        x = re.search('^[AGCTN]*$', sequence)
-        if x:
-            self.sequence = sequence
-
-    def getDNA(self):
-        return self.sequence
-
-    def getTranscript(self):
-        transcript = ''
-        for i in self.sequence:
-            if i == 'T':
-                transcript += 'U'
-            else:
-                transcript += i
-        return transcript
-
-    def getLength(self):
-        return len(self.sequence)
-
-    def getGcPercent(self):
-        length = len(self.sequence)
-        GC = self.sequence.count('G') + self.sequence.count('C')
-        GCpercent = GC / length
-        return GCpercent
+import Afvinkopdracht5_class as a5
 
 
 def select_file():
@@ -118,14 +61,14 @@ def backend():
     filename = select_file()
     for i in multiple_fna(filename):
         templist = i.split('|')
-        tempobject = fasta()
+        tempobject = a5.fasta()
         tempobject.setHeader(templist[0])
         tempobject.setSequence(templist[1])
         objectlist.append(tempobject)
     highestgc = 0
     highestgcobject = None
     for j in objectlist:
-        tempDna = DNA(j.getSequence())
+        tempDna = a5.DNA(j.getSequence())
         if tempDna.getGcPercent() > highestgc:
             highestgc = tempDna.getGcPercent()
             highestgcobject = j
@@ -134,7 +77,7 @@ def backend():
         message=f'The sequence with the highest GC content is \n'
                 f'{highestgcobject.getHeader()}\n with a GC content'
                 f' of {highestgc*100:.2f}%')
-    highestgcobjectdna = DNA(highestgcobject.getSequence())
+    highestgcobjectdna = a5.DNA(highestgcobject.getSequence())
     print(f'Header: {highestgcobject.getHeader()}\nGC percentage: '
           f'{highestgc*100:.2f}%\nTranscript: '
           f'{highestgcobjectdna.getTranscript()}\nLength: '
