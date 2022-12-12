@@ -2,6 +2,9 @@ from tkinter.messagebox import showwarning
 import random
 import winsound as ws
 import webbrowser
+import urllib.request
+import pathlib
+import ctypes
 
 
 def panicPopUp():
@@ -60,3 +63,24 @@ def brrrrrr(num):
     if num > 0:
         brrrrrr(num)
         brrrrrr(num)
+
+
+def setBackground(url):
+    """
+    sets the background of the desktop to the image at the url
+
+    Parameters
+    ----------
+    url : str
+        the url of the image to be set as the background
+
+    Returns
+    -------
+    None
+    """
+    urllib.request.urlretrieve(url, "image.png")
+    path = f"{pathlib.Path('image.png').parent.resolve()}\image.png"
+    print(path)
+    SPI_SETDESKWALLPAPER = 20
+    ctypes.windll.user32.SystemParametersInfoW(SPI_SETDESKWALLPAPER, 0, path,
+                                               0)
