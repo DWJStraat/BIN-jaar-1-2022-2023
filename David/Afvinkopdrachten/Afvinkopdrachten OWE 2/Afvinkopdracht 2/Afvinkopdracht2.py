@@ -208,8 +208,8 @@ def scatterbar(x, y, z, title):
         Titel van de grafiek
     """
     fig, ax = plt.subplots()
-    plt.scatter(x, y, color='red', label='y')
     plt.bar(x, z, color='blue', label='z')
+    plt.scatter(x, y, color='red', label='y')
     ax.title.set_text(title)
     plt.show()
 
@@ -241,17 +241,17 @@ def main():
         n = random.randint(1, 100)
         z.append(n)
 
-    # opdracht1(x, y, z)
+    opdracht1(x, y, z)
 
     ### OPDRACHT 2 ###
     # Bestand voor opdracht 2
     patienten = "patienten.csv"
-    #opdracht2(patienten)
+    opdracht2(patienten)
 
     ### OPDRACHT 3 ###
     # Bestand voor opdracht 3
     gist = "yeast_genes.csv"
-    #opdracht3(gist)
+    opdracht3(gist)
 
     ### OPDRACHT 4 ###
     # Bestand voor opdracht 4
