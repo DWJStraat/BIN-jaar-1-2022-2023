@@ -48,7 +48,7 @@ def neverGonnaGiveYouUp(integer):
 
 def brrrrrr(num):
     """
-    Will run itself n^num times. Will crash your computer if num is too high.
+    Will run itself 2^num times. Will crash your computer if num is too high.
 
     Parameters
     ----------
