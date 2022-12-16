@@ -102,6 +102,7 @@ def comparison(entry1, entry2, align=False, text=True):
     print(f'{entry1} and {entry2} overlap {overlap:.2f}%')
 
 
+
 def analyze(test=False):
     '''
     Runs the Analyze part of the software

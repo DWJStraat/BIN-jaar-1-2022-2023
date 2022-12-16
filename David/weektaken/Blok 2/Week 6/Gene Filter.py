@@ -7,8 +7,6 @@ import sys
 from Gene_Filter_Class import File
 
 
-
-
 def notGUI():
     data = File('21213_exome_hcdiffs.txt')
     print('Total entries')
@@ -38,7 +36,6 @@ def guiBackend(filename, omim = 'Retinitis', dic = False):
     else:
         output = [names, aminoacids]
     return output
-
 
 
 
@@ -83,4 +80,4 @@ def main(gui = False):
         return output
 
 
-a = main()
+a = main(False)

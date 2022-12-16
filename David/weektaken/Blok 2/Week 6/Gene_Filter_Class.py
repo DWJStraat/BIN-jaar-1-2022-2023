@@ -1,5 +1,11 @@
 class File:
     def __init__(self, path, separator='\t'):
+        self.deletions = 0
+        self.insertions = 0
+        self.substitutions = 0
+        self.exon = 0
+        self.splice = 0
+        self.nonsense = 0
         self.content = []
         self.data = []
         self.headers = []
@@ -81,7 +87,6 @@ class File:
             names.append(self.data[i][header])
         return names
 
-
     def aminoacids(self):
         header = self.findHeader('AminoAcid changes')
         aminoacids = []
@@ -106,7 +111,9 @@ class File:
         header2 = self.findHeader('variation reads')
         purify = []
         for i in range(len(self.data)):
-            if self.data[i][header] != '' and float(self.data[i][header]) >= 20 and int(self.data[i][header2]) >= 5:
+            if self.data[i][header] != '' and float(
+                    self.data[i][header]) >= 20 and int(
+                    self.data[i][header2]) >= 5:
                 purify.append(self.data[i])
         self.data = purify
 
