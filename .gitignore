@@ -17,3 +17,6 @@ David/BINGO/bingo test
 *.jpg
 *.png
 *.json
+*.pkl
+*.fasta
+*.txt
