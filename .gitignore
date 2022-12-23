@@ -4,8 +4,16 @@ David/*.png
 David/*.pyc
 David/*.fna
 David/__pycache__/HORUS.cpython-38.pyc
-David/weektaken/output.png
+David/weektaken/Blok 1/output.png
 *.fna
 *.jpg
 *.png
 config.json
+David/BINGO/.env
+*.pyc
+David/BINGO/bingo test
+*.dat
+*.bingo
+*.jpg
+*.png
+*.json
