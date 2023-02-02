@@ -26,7 +26,8 @@ def notGUI():
     aminoacid = data.aminoacids()
     return name, aminoacid
 
-def guiBackend(filename, omim = 'Retinitis', dic = False):
+
+def guiBackend(filename, omim='Retinitis', dic=False):
     data = File(filename)
     data.filter(omim)
     names = data.names()
@@ -38,22 +39,23 @@ def guiBackend(filename, omim = 'Retinitis', dic = False):
     return output
 
 
-
 def selectFile():
     path = fd.askopenfilename()
     if path != '':
         output = guiBackend(path)
         print(output)
-        df = pd.DataFrame({'names' : output[0], 'aminoacids' : output[1]})
+        df = pd.DataFrame({'names': output[0], 'aminoacids': output[1]})
         print(df)
         show = tk.Tk()
         show.title('Output')
         show.geometry('500x500')
         txt = tk.Text(show)
         txt.pack()
+
         class PrintToTXT(object):
             def write(self, s):
                 txt.insert(tk.END, s)
+
         sys.stdout = PrintToTXT()
         print(df)
         show.mainloop()
@@ -63,7 +65,7 @@ def selectFile():
         showinfo('Error', 'No file selected')
 
 
-def main(gui = False):
+def main(gui=False):
     if gui:
         root = tk.Tk()
         root.title('Gene Filter')
@@ -80,4 +82,4 @@ def main(gui = False):
         return output
 
 
-a = main(False)
+main(True)

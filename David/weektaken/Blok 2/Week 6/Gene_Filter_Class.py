@@ -10,8 +10,12 @@ class File:
         self.data = []
         self.headers = []
         self.openFile(path, separator)
+        self.refreshCount()
+
+    def refreshCount(self):
         self.countMutations()
         self.mutationLocation()
+        self.getNonsense()
 
     def openFile(self, path, separator):
         with open(path, 'r') as file:
@@ -24,6 +28,7 @@ class File:
                     self.content.append(temp)
         self.headers = self.content[0]
         self.data = self.content[1:]
+        self.refreshCount()
 
     def findHeader(self, header):
         for i in range(len(self.headers)):
@@ -64,7 +69,7 @@ class File:
         self.exon = exon
         self.splice = splice
 
-    def nonsense(self):
+    def getNonsense(self):
         header = self.findHeader('Mutation Amino Acid')
         count = 0
         for i in range(len(self.data)):
@@ -79,6 +84,7 @@ class File:
             if omim in self.data[i][header]:
                 omimlist.append(self.data[i])
         self.data = omimlist
+        self.refreshCount()
 
     def names(self):
         header = self.findHeader('Gene name')
@@ -105,6 +111,7 @@ class File:
             if self.data[i][header] == '' or self.data[i][header2] == 'HGMD':
                 pathogene.append(self.data[i])
         self.data = pathogene
+        self.refreshCount()
 
     def purify(self):
         header = self.findHeader('% variation')
@@ -116,6 +123,7 @@ class File:
                     self.data[i][header2]) >= 5:
                 purify.append(self.data[i])
         self.data = purify
+        self.refreshCount()
 
     def removeIntron(self):
         header = self.findHeader('Gene component')
@@ -124,6 +132,7 @@ class File:
             if self.data[i][header] != 'INTRON_REGION':
                 intron.append(self.data[i])
         self.data = intron
+        self.refreshCount()
 
     def proteinCheck(self):
         header = self.findHeader('Protein domain')
@@ -132,6 +141,7 @@ class File:
             if self.data[i][header] != 'No protein':
                 newdata.append(self.data[i])
         self.data = newdata
+        self.refreshCount()
 
     def filter(self, omim):
         self.omimFilter(omim)
