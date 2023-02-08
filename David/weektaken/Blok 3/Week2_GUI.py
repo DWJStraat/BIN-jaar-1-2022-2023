@@ -20,6 +20,9 @@ class GUI:
                                   command=self.select_file)
         file_path_button.pack()
 
+        label = Label(self.master, text="Step size")
+        label.pack()
+
         self.step = Text(self.master, height=1, width=20)
         self.step.pack()
 
