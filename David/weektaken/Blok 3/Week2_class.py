@@ -8,7 +8,9 @@ import matplotlib.pyplot as plt
 
 
 def calcGCsingle(sequence):
-    return (sequence.count("G") + sequence.count("C")) / len(sequence)
+    GC = sequence.count("G") + sequence.count("C")
+    AT = sequence.count("A") + sequence.count("T")
+    return GC / (GC + AT)
 
 
 def calcACGTsingle(sequence):
@@ -22,16 +24,19 @@ class main:
         self.file = filename
         self.file_name = filename.split("\\")[-1]
         self.content = self.load_file()
+        self.header = self.content[0]
+        self.accession = self.header.split(" ")[0][1:]
         self.type = self.identify()
         self.code = self.process()
         self.gc = self.calcGC()
+        self.n = self.gc
         self.length = len(self.code)
         self.step = step
         if self.type == "complete":
             self.gc_step = self.calcGCstep(self.step)
             self.gc_mean = np.mean(self.gc_step)
             self.gc_median = np.median(self.gc_step)
-            self.gc_var = np.var(self.gc_step)
+            self.gc_var = np.var(self.gc_step)*10000
             self.gc_std = np.std(self.gc_step)
 
     def load_file(self):
@@ -44,7 +49,7 @@ class main:
             return "coding"
         elif headers == 1:
             contents = "".join(self.content[1:]).replace("\n", "")
-            return "complete" if set(contents) <= set("ATGCN") else "prot"
+            return "complete" if set(contents) <= set("ATGCNMR") else "prot"
         else:
             return "invalid"
 
@@ -94,20 +99,34 @@ class main:
         return [calcACGTsingle(step_code[i]) for i in
                 range(len(step_code))]
 
-    def plotGC(self):
-        plt.plot(self.gc_step, color="blue")
-        not_agct_list = []
-        for i in self.calcACGTstep(100):
-            not_agct = 1 - i
-            if not_agct > 0.1:
-                not_agct_list.append(not_agct)
-            else:
-                not_agct_list.append(None)
+    def estimateGC(self, step):
+        if self.type == "complete":
+            AGCT = self.calcACGTstep(step)
+            unknown_percentage = [1 - AGCT[i] for i in range(len(AGCT))]
+            length = len(self.code)
+            unknown = np.mean(unknown_percentage) * length
+            unknown_gc = unknown * self.gc
+            return unknown_gc / length
 
-        x = np.arange(0, len(self.gc_step), 1)
-        plt.scatter(x, not_agct_list, color="red")
+    def plotGC(self):
+        unknown_val = self.estimateGC(self.step)
+        steps = self.gc_step
+        estimate = steps + [unknown_val]
+        for i in range(len(steps)):
+            steps[i] = steps[i] * 100
+        for i in range(len(estimate)):
+            estimate[i] = estimate[i] * 100
+            if estimate[i] == 0:
+                estimate[i] = None
+        f, ax = plt.subplots()
+        ax.set_xlim(0, len(self.code)/self.step)
+        ax.set_ylim(0, 100)
+        plt.plot(estimate, color="red")
+        plt.plot(steps, color="blue")
+
         plt.xlabel(f"{self.step} bp")
-        plt.ylabel("Percentage of DNA")
-        plt.title(f"GC content of {self.file_name}")
-        plt.legend(["GC", "Not ACGT"])
+        plt.ylabel("Percentage of DNA in %")
+        plt.title(f"GC content of {self.accession}")
+        plt.legend(["Estimated GC", "GC"])
+
         return plt

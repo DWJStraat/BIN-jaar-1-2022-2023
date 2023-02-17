@@ -44,11 +44,13 @@ class GUI:
             mb.showerror("Wrong file type",
                          "Please select a .fasta or .fna file")
             return
-        if self.step != int:
+        try:
+            self.step = int(self.step.get("1.0", "end-1c"))
+            print(self.step)
             self.quit()
             display(self.file_path, self.step)
 
-        else:
+        except:
             mb.showerror("Wrong step type", "Please enter an integer")
             return
 
@@ -62,7 +64,7 @@ class display:
         self.step = step
 
         self.master = Tk()
-        self.main = main(self.file_path)
+        self.main = main(self.file_path, self.step)
         try:
             self.plot = self.main.plotGC()
         except AttributeError:
@@ -89,7 +91,7 @@ class display:
 
         variation = tkinter.Label(self.master,
                                   text=f"Variation:"
-                                       f"{self.main.gc_var * 100:.2f}%",
+                                       f"{self.main.gc_var:.4f}",
                                   bg="white")
         variation.pack()
 
