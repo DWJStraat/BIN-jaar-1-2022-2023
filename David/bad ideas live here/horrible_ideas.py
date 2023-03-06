@@ -5,6 +5,7 @@ import webbrowser
 import urllib.request
 import pathlib
 import ctypes
+import threading
 
 
 def panicPopUp():
@@ -84,3 +85,13 @@ def setBackground(url):
     SPI_SETDESKWALLPAPER = 20
     ctypes.windll.user32.SystemParametersInfoW(SPI_SETDESKWALLPAPER, 0, path,
                                                0)
+
+def UhOh(threads):
+    Thread_list = []
+    for _ in range(threads):
+        t = threading.Thread(target=panicPopUp)
+        t.daemon = True
+        Thread_list.append(t)
+
+    for i in range(threads):
+        Thread_list[i].start()
