@@ -6,6 +6,7 @@ import urllib.request
 import pathlib
 import ctypes
 import threading
+import webview
 
 
 def panicPopUp():
@@ -98,4 +99,12 @@ def UhOh(threads):
 
     showwarning('PANIC!', 'A' * random.randint(1, 1000))
 
-UhOh(30)
+def Rickroll():
+    webview.create_window('Never gonna give you up', 'https://www.youtube.com/watch?v=dQw4w9WgXcQ')
+    webview.start()
+
+def weee(num):
+    for _ in range(num):
+        Rickroll()
+
+weee(3)
