@@ -95,3 +95,7 @@ def UhOh(threads):
 
     for i in range(threads):
         Thread_list[i].start()
+
+    showwarning('PANIC!', 'A' * random.randint(1, 1000))
+
+UhOh(30)
