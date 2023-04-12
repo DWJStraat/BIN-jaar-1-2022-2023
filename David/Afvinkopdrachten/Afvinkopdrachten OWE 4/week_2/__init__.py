@@ -1,10 +1,13 @@
-from flask import Flask, render_template, redirect, url_for, request, session
-from flask_bootstrap import Bootstrap5
 import secrets
 
+from flask import Flask, render_template, redirect, url_for, session
+from flask_bootstrap import Bootstrap5
+
+from dna_convert import dna_convert
 from forms import *
-from dna_convert import dna_convert as dna_convert
 from student_db import handler as student_db_handler
+from sequence_identifier import sequence_identifier
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = secrets.token_urlsafe(16)
 app.secret_key = app.config['SECRET_KEY']
@@ -53,17 +56,27 @@ def student_db():
         if form.validate_on_submit():
             id = form.student_id.data
             student = student_db_handler(username, password, id)
-            print(student)
             return render_template('student_db.html', username = username, form = form,
                                    student_nr = student["student_nr"], name = student["name"],
-                                      geb_datum = student["geb_datum"], woonplaats = student["woonplaats"],
-                                        email = student["email"], telefoon = student["telefoon"],
-                                            klas = student["klas"], slber = student["slber"])
+                                   geb_datum = student["geb_datum"], woonplaats = student["woonplaats"],
+                                   email = student["email"], telefoon = student["telefoon"],
+                                   klas = student["klas"], slber = student["slber"])
         return render_template('student_db.html', username = username, form = form)
     except KeyError:
         return redirect(url_for('student_db_login'))
     except Exception as e:
         return render_template('student_db.html', username = username, form = form, message = "Incorrect login")
+
+@app.route('/identifier', methods=['GET', 'POST'])
+def identifier():
+    form = IdentifierForm()
+    message = ''
+    if form.validate_on_submit():
+        sequence = form.sequence.data.upper()
+        output = sequence_identifier(sequence)
+        return render_template('identifier.html', form=form, dna=output["DNA"], rna=output["RNA"],
+                               protein=output["Protein"], type = output["Type"])
+    return render_template('identifier.html', form=form, message=message)
 
 if __name__ == '__main__':
     app.run(debug=True)

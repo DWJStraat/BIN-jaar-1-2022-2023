@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% from 'bootstrap5/form.html' import render_form %}
+
+{% block title %}
+DNA to Protein
+{% endblock %}
+
+
+{% block content %}
+
+<!--
+	TIPS about using Bootstrap-Flask:
+	https://github.com/helloflask/bootstrap-flask
+	https://bootstrap-flask.readthedocs.io/
+-->
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-10 col-lg-8 mx-lg-auto mx-md-auto">
+            {{ render_form(form) }}
+            <p class="pt-5">{{ protein }}</p>
+            <p class="pt-5">{{ dna }}</p>
+            <p class="pt-5">{{ rna }}</p>
+            <p class="pt-5">{{ type }}</p>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

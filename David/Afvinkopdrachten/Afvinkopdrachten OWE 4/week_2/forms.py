@@ -14,3 +14,7 @@ class LoginForm(FlaskForm):
 class StudentForm(FlaskForm):
     student_id = StringField('Student nummer', validators=[DataRequired()])
     submit = SubmitField('Submit')
+
+class IdentifierForm(FlaskForm):
+    sequence = StringField('Sequence', validators=[DataRequired()])
+    submit = SubmitField('Submit')
