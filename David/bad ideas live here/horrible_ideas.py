@@ -107,4 +107,4 @@ def weee(num):
     for _ in range(num):
         Rickroll()
 
-weee(3)
+UhOh(100)

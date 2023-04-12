@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Opdrachten JavaScript</title>
+</head>
+<body>
+<h1>Opdrachten JavaScript</h1>
+Gebruik deze HTML als template voor je opdrachten. Vul de code aan
+waar dit wordt gevraagd. Bekijk goed de voorbeelden en onthoud:
+google is je beste vriend.
+
+<h2>Opdrachten variabelen</h2>
+<h3>Opdracht 1</h3>
+Jullie zijn gewend om met variabelen te werken in python. Bij deze opdrachten
+gaan we aan de slag met variabelen in JavaScript. Bekijk onderstaande code.
+
+<p id="opdracht1_variabelen" style="font-weight: bold"></p>
+<script>
+    var x, y, z;        // Hier maak ik drie variabelen aan, deze zijn leeg. Wel aangemaakt.
+    x = 4;              // de variabele x krijgt de waarde 4
+    y = 10;             // de variabele y krijgt de waarde 10
+    z = x + y           // z krijgt de waarde van de som van x en y
+    document.getElementById("opdracht1_variabelen").innerHTML =
+        "de som van x en y is: " + z + ".";
+</script>
+
+Ik zou nu graag hetzelfde zien, maar dan zou ik willen weten wat het GC
+percentage is van een gegeven sequentie. De sequentie is in totaal 200
+nucleotiden lang, waarvan 70 nucleotiden uit G en C bestaat. Laat met
+een rekensom in JavaScript zien wat het GC percentage is. Kijk goed naar
+hoe de code hierboven is geschreven. De paragraaf waar het antwoord in
+moet komen te staan, staat hieronder al gedefinieerd. Schrijf je code
+binnen de tags 'script'
+
+<p id="opdracht1_antwoord"></p>
+<script>
+    var length, GC, GC_percentage;
+    length = 200;
+    GC = 70;
+    GC_percentage = parseFloat(GC / length *100).toFixed(2);
+    document.getElementById("opdracht1_antwoord").innerHTML =
+        "Het GC percentage is: " + GC_percentage + "%.";
+</script>
+
+
+<h3>Opdracht 2</h3>
+Nu we hebben gezien hoe integers werken, gaan we door met strings. Beschrijf
+in onderstaande tags jouw voornaam, achternaam en klas. Kijk goed naar de
+code hierboven hoe je dit zou kunnen aanpakken.
+<p id="voornaam"></p>
+
+<p id="achternaam"></p>
+<p id="klas"></p>
+<script>
+    var voornaam, achternaam, klas;
+    voornaam = "David";
+    achternaam = "Straat";
+    klas = "BIN1A";
+    document.getElementById("voornaam").innerHTML = "Voornaam: " + voornaam;
+    document.getElementById("achternaam").innerHTML = "Achternaam: " + achternaam;
+    document.getElementById("klas").innerHTML = "Klas: " + klas;
+</script>
+
+
+<h3>Opdracht 3</h3>
+<p>Maak een lijst aan met je favoriete maaltijden. Laat vervolgens zien
+welke maaltijden in die lijst zitten, je eindigt met je favoriete maaltijd
+    (Bonus: probeer het in een for loop te doen)</p>
+<p id="maaltijden"></p>
+<script>
+    var maaltijden = ["pizza", "pasta", "broodje kroket"];
+    document.getElementById("maaltijden").innerHTML = "Mijn favoriete maaltijden zijn: <br>";
+    for (var i = 0; i < maaltijden.length; i++) {
+        document.getElementById("maaltijden").innerHTML += maaltijden[i] + "<br>";
+    }
+</script>
+
+
+<h2>Toepassen JavaScript in je HTML afvinkopdracht 1</h2>
+<p>Breid je HTML code van afvinkopdracht 1 uit met JavaScript code,
+voeg bijvoorbeeld knoppen toe om een wisseling te maken tussen twee
+verschillende afbeeldingen. Of probeer afbeeldingen/stukken tekst te laten
+verdwijnen met een druk op de knop. </p>
+
+</body>
+</html>
