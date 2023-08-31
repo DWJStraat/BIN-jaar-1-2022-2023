@@ -12,10 +12,6 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = secrets.token_urlsafe(16)
 app.secret_key = app.config['SECRET_KEY']
 
-
-
-def ensembl_convert(ensembl):
-    pass
 bootstrap = Bootstrap5(app)
 # csrf = CSRFProtect(app)
 

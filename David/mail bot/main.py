@@ -5,24 +5,37 @@
 import win32com.client
 import json
 
-config = json.load(open('config.json'))
-outlook = win32com.client.Dispatch("Outlook.Application")
+
+class Outlook():
+    def __init__(self):
+        self.unread = None
+        self.outlook = win32com.client.Dispatch("Outlook.Application")
+        self.MAPI = self.outlook.GetNamespace("MAPI")
+        self.config = json.load(open('config.json'))
+
+    def send(self, subject=None, body=None, to=None):
+        olmailitem = 0x0
+        newMail = self.outlook.CreateItem(olmailitem)
+        newMail.Subject = subject if subject is not None else self.config['subject']
+        newMail.Body = body if body is not None else self.config['body']
+        newMail.To = to if to is not None else self.config['to']
+        newMail.Send()
+
+    def get_unread(self):
+        return [
+            mail
+            for mail in self.outlook.GetNamespace("MAPI")
+            .Folders[0]
+            .Folders[1]
+            .Items
+            if mail.UnRead
+        ]
+
+    def load_unread(self):
+        unread = self.get_unread()
+        mails = [[mail.Subject, mail.Body, mail.SenderEmailAddress] for mail in unread]
+        self.unread = mails
 
 
-def send_mail(config, outlook):
-    """
-    Send an email using outlook
-    Parameters
-    ----------
-    config : JSON file
-        The configuration file for the email
-        Must contain "to" "subject" and "body"
-    outlook : win32com.client.Dispatch("Outlook.Application")
-        The outlook application
-    """
-    olmailitem = 0x0
-    newMail = outlook.CreateItem(olmailitem)
-    newMail.Subject = config['subject']
-    newMail.Body = config['body']
-    newMail.To = config['to']
-    newMail.Send()
+a = Outlook()
+a.load_unread()

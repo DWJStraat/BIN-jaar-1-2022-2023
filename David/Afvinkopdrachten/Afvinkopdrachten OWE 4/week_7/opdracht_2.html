@@ -3,46 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-  <script>
-    function naam_klas(){
-        var naam, klas, output
-        naam = document.getElementById("naam").value
-        klas = document.getElementById("klas").value
-        output = naam + " zit in klas " + klas
-        console.log(output)
-        document.getElementById("output").innerHTML = output
-      }
-      function dna_calc() {
-        var dna, gc, gc_percent
-        dna = document.getElementById("dna").value
-        dna = dna.toUpperCase()
-        gc = dna.match(/[GC]/g)
-        gc = gc.length
-        gc_percent = gc / dna.length * 100
-        alert(gc_percent + '%');
-      }
-    function  change_color() {
-      var hex, text
-      hex = document.getElementById("hex").value
-      text = document.getElementById("text")
-      text.style.color = hex
-    }
+    <script>
+        function naam_klas(){
+            var naam, klas, output
+            naam = document.getElementById("naam").value
+            klas = document.getElementById("klas").value
+            output = naam + " zit in klas " + klas
+            console.log(output)
+            document.getElementById("output").innerHTML = output
+        }
+
+        function dna_calc() {
+            var dna, gc, gc_percent
+            dna = document.getElementById("dna").value
+            dna = dna.toUpperCase()
+            gc = dna.match(/[GC]/g)
+            gc = gc.length
+            gc_percent = gc / dna.length * 100
+            alert(gc_percent + '%');
+        }
+
+        function  change_color() {
+            var hex, text
+            hex = document.getElementById("hex").value
+            text = document.getElementById("text")
+            text.style.color = hex
+        }
     </script>
 </head>
 <body>
-  <input type="text" id="dna">
-    <button onclick="dna_calc()">dna_calc</button>
-  <p>Student naam</p>
-  <input type = "text" id="naam">
-  <p id>Klas</p>
-  <input type = 'text' id="klas">
-  <button onclick="naam_klas()">Click me</button>
-  <h1>
+<input type="text" id="dna">
+<button onclick="dna_calc()">dna_calc</button>
+<p>Student naam</p>
+<input type = "text" id="naam">
+<p id>Klas</p>
+<input type = 'text' id="klas">
+<button onclick="naam_klas()">Click me</button>
+<h1>
     <span id="output"></span>
-  </h1>
-  <p id = "text">Enter a color here to change the color of this text</p>
-    <input type="text" id="hex">
-    <button onclick="change_color()">Change color</button>
+</h1>
+<p id = "text">Enter a color here to change the color of this text</p>
+<input type="text" id="hex">
+<button onclick="change_color()">Change color</button>
 
 </body>
 </html>
