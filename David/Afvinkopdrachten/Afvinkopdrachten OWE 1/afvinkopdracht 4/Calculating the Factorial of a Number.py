@@ -5,11 +5,9 @@ Created on Thu Sep 22 11:10:00 2022
 @author: dstra
 """
 
+
 number = int(input('Enter a number: '))
 count = 1
-n = 1
-while n <= number:
-    count = count * n
-    n += 1
-    
+for n in range(1, number + 1):
+    count *= n
 print (f'{number}! = {count}')

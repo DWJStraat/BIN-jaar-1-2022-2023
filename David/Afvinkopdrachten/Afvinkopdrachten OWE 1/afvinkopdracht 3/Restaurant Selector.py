@@ -15,16 +15,16 @@ if a == "Y":
 
 if b == "Y":
     choice[1] = True
-    
+
 if c == "Y":
     choice[2] = True
 
 print("Here are your restaurant options:")
 if choice == [False, False, False]:
     print('Joe’s Gourmet Burgers')
-if choice[1] == False:
+if not choice[1]:
     print('Main Street Pizza Company')
 print('Corner Café')
-if choice[1:2] == False:
+if not choice[1:2]:
     print('Mama’s Fine Italian')
 print('The Chef’s Kitchen')

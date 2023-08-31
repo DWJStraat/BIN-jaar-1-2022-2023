@@ -8,7 +8,7 @@ i = 0
 bugs = 0
 while i < 5:
     bugstoday = int(input('How many bugs did you collect today?\n'))
-    bugs = bugs + bugstoday
+    bugs += bugstoday
     i += 1
 
 print(f'You collected {bugs} bugs the last 5 days')
