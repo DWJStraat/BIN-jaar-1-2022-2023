@@ -8,7 +8,7 @@ VT_123456	geen accessiecode
 MN123456	geen accessiecode
 
 Corresponderende regex:
-N._* 
+N.opdracht_2*
 
 Check of een van de onderstaande sequenties een DNA sequentie is
 

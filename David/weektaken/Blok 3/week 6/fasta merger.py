@@ -21,7 +21,7 @@ def content_handler(content, name):
 def env(content, envs, env_files, name):
     name = re.sub(r'env', '', name, flags=re.IGNORECASE)
     name = re.sub(r'protein', '', name, flags=re.IGNORECASE)
-    for token in ['_','-', '_', '[', ']']:
+    for token in ['opdracht_2','-', 'opdracht_2', '[', ']']:
         name = name.lstrip(token).rstrip(token)
     env_files.append(i)
     content = content_handler(content, name)
@@ -31,7 +31,7 @@ def vif(content, vifs, vif_files, name):
     print(f'before: {name}')
     name = re.sub(r'vif', '', name, flags=re.IGNORECASE)
     name = re.sub(r'protein', '', name, flags=re.IGNORECASE)
-    for token in ['_','-', '_', '[', ']']:
+    for token in ['opdracht_2','-', 'opdracht_2', '[', ']']:
         name = name.lstrip(token).rstrip(token)
     print(f'after: {name}')
     vif_files.append(i)
@@ -46,7 +46,7 @@ for i in list:
         content = file.readlines()
         name = os.path.basename(i)
         name = name.split('.')[0]
-        name = name.replace(' ', '_')
+        name = name.replace(' ', 'opdracht_2')
         if re.search(r'env', content[0], re.IGNORECASE):
             env(content, envs, env_files, name)
         elif re.search(r'vif', content[0], re.IGNORECASE):

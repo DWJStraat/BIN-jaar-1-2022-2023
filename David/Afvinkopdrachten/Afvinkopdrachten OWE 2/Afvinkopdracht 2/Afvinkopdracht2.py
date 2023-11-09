@@ -1,12 +1,16 @@
+"""
+A script written by David Straat
+"""
+
 import random
 import matplotlib.pyplot as plt
 
 
-def opdracht1(x, y, z):
+def opdracht_1(x, y, z):
     """
     Opdracht 1
 
-    Maak een grafiek van de lijsten x, y en z.
+    Generates a plot based on the lists X, Y, and Z
 
     Parameters
     ----------
@@ -27,15 +31,22 @@ def opdracht1(x, y, z):
 
     bar(x, y, 'Barplot')
 
-    scatterbar(x, y, z, 'Scatterplot en Barplot')
+    scatterbar(x, y, z, 'Scatterplot and Barplot')
 
-def opdracht2(bestand):
-    patientdata = readcsv(bestand)
+
+def opdracht_2(file):
+    """
+    Generates a scatterplot from data in the file provided
+    Parameters
+    ----------
+    file
+    """
+    patient_data = read_csv(file)
     pat_id = []
     med_a = []
     med_b = []
     doc = []
-    for i in patientdata:
+    for i in patient_data:
         pat_id.append(int(i[0]))
         med_a.append(int(i[1]))
         med_b.append(int(i[2]))
@@ -49,55 +60,57 @@ def opdracht2(bestand):
         elif j > 50:
             med_b_use[2] += 1
 
-    scatter(med_a, med_b, 'Medicijn A tegenover Medicijn B')
-    line(pat_id, med_a, 'Dosis Medicijn A per patient')
-    histo(doc, 'Aantal patienten per arts')
-    pie(med_b_use, ['<40', '40-50', '>50'], 'Gebruik van medicijn B')
+    scatter(med_a, med_b, 'Medicine A vs Medicine B')
+    line(pat_id, med_a, 'Dose Medicine A per patient')
+    histo(doc, 'Patients per doctor')
+    pie(med_b_use, ['<40', '40-50', '>50'], 'Usage of Medicine B')
     scatterbar(med_b, med_a, pat_id,
-               'Medicijn B tegenover Medicijn A en patienten')
+               'Medicine B vs Medicine A and patients')
 
-def opdracht3(bestand, european=False):
+
+def opdracht_3(file, european=False):
     """
-    Maak een histogram van de lijst met waardes uit het csv bestand.
+    Makes a histogram out of a list of values from a CSV file.
 
     Parameters
     ----------
-    bestand : str
-        Naam van het csv bestand
+    file : str
+        Path of CSV file
     european : bool
-        True als het csv bestand een ; als scheidingsteken gebruikt
+        True if CSV uses ; to separate.
         Default is False
     """
-    data = readcsv(bestand, european)
-    waardes = []
+    data = read_csv(file, european)
+    values = []
     for i in data:
         try:
-            waardes.append(i[1])
-        except:
+            values.append(i[1])
+        except IndexError:
             continue
     fig, ax = plt.subplots()
-    plt.hist(waardes, color='red', label=waardes)
+    plt.hist(values, color='red', label=values)
     ax.title.set_text('Histogram')
     ax.set_xlabel('Status')
-    ax.set_ylabel('Aantal genen')
+    ax.set_ylabel('Number of genes')
     ax.legend()
     plt.show()
 
-def readcsv(file_name, european=False):
+
+def read_csv(file_name, european=False):
     """
-    Lees een csv bestand in en zet deze om naar een lijst van lijsten.
+    Lees een csv file in en zet deze om naar een lijst van lijsten.
 
     Parameters
     ----------
     file_name : str
-        Naam van het csv bestand
+        Naam van het csv file
     european : bool
-        True als het csv bestand een ; als scheidingsteken gebruikt
+        True als het csv file een ; als scheidingsteken gebruikt
         Default is False
     Returns
     -------
     csv: list
-        Lijst van lijsten met de data uit het csv bestand
+        Lijst van lijsten met de data uit het csv file
     """
     teller = 0
     csv = []
@@ -232,6 +245,9 @@ def histo(x, title):
 
 
 def main():
+    """
+    Runs the code
+    """
     ### OPDRACHT 1 ###
     # Gebruik de lijsten x y en z voor de grafieken van opdracht 1
     x = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
@@ -241,21 +257,23 @@ def main():
         n = random.randint(1, 100)
         z.append(n)
 
-    opdracht1(x, y, z)
+    opdracht_1(x, y, z)
 
-    ### OPDRACHT 2 ###
+    # OPDRACHT 2 #
     # Bestand voor opdracht 2
     patienten = "patienten.csv"
-    opdracht2(patienten)
+    opdracht_2(patienten)
 
-    ### OPDRACHT 3 ###
+    # OPDRACHT 3 #
     # Bestand voor opdracht 3
     gist = "yeast_genes.csv"
-    opdracht3(gist)
+    opdracht_3(gist)
 
-    ### OPDRACHT 4 ###
+    # OPDRACHT 4 #
     # Bestand voor opdracht 4
     test = "test.csv"
-    opdracht3(test, True)
+    opdracht_3(test, True)
 
-main()
+
+if __name__ == "__main__":
+    main()

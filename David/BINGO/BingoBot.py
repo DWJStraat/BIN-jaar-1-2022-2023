@@ -93,7 +93,7 @@ async def createcard(interaction: discord.Interaction, ids: str):
     card, seed = game.generateCard()
     game.save()
     await interaction.response.send_message(
-        file=discord.File(fp=f'card_{game.name}_{seed}.jpg'))
+        file=discord.File(fp=f'card_{game.name}opdracht_2{seed}.jpg'))
     await interaction.response.send_message(
         f'Created a bingo card for {interaction.user.name}')
 
@@ -103,7 +103,7 @@ async def createcard(interaction: discord.Interaction, ids: str):
 @discord.app_commands.describe(ids='ID of the bingo game', seed='Seed')
 async def showcard(interaction: discord.Interaction, ids: str, seed: int):
     await interaction.response.send_message(
-        file=discord.File(fp=f'card_{ids}_{seed}.jpg'))
+        file=discord.File(fp=f'card_{ids}opdracht_2{seed}.jpg'))
 
 
 client.run(

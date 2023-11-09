@@ -82,7 +82,7 @@ class Bingo:
         table.set_fontsize(40)
         table.scale(4, 4)
         fig.tight_layout()
-        plt.savefig(f'card_{self.name}_{self.seed}.jpg')
+        plt.savefig(f'card_{self.name}opdracht_2{self.seed}.jpg')
         seed = self.seed
         self.seed += 1
         return card, seed

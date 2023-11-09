@@ -28,7 +28,7 @@ def random_writer(file_name, number):
     '''
     try:
         with open(file_name, 'a') as file:
-            for i in range(0, number):
+            for _ in range(number):
                 random_num = str(random.randint(1, 500)) + '\n'
                 file.write(random_num)
     except FileNotFoundError:

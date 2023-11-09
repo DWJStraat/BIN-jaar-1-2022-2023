@@ -1,6 +1,6 @@
 #################################################################################
 # Controle op enzymen die knippen in een sequentie
-# Bron GenBank bestand: http://www.canr.msu.edu/lgc/GenBankfiles/AF165912.htm
+# Bron GenBank file: http://www.canr.msu.edu/lgc/GenBankfiles/AF165912.htm
 # Auteur: Martijn van der Bruggen
 #         HAN University
 # Creatie: november 2008 (MvdB)
@@ -24,12 +24,12 @@ HindIII = "AAGCTT"  # knipt op A^AGCTT     Haemophilus influenzae
 TaqI = "TCGA"  # knipt op T^CGA    	  Thermus aquaticus
 
 
-# Lees een bestand en parse de sequentie
+# Lees een file en parse de sequentie
 def getSequentie(bestandsnaam):
-    """Haal de sequentie uit het bestand
+    """Haal de sequentie uit het file
 
     Input:
-    bestandsnaam - string, naam van het bestand met de sequentie
+    bestandsnaam - string, naam van het file met de sequentie
 
     Output:
     sequence - string, sequentie 

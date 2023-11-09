@@ -1,16 +1,22 @@
-def most_frequent(inputlist):
+"""
+A script written by David Straat for generating
+a sequence consensus and profile.
+"""
+
+
+def most_frequent(input_list):
     """
     Determines the most frequent item in a list.
     parameters:
     ----------
-    inputlist: list
+    input_list: list
         the list to be used.
     Returns:
     -------
     most_frequent: str
         the most frequent item in the list.
     """
-    return max(set(inputlist), key=inputlist.count)
+    return max(set(input_list), key=input_list.count)
 
 
 def multiple_fna(file_name):
@@ -25,11 +31,11 @@ def multiple_fna(file_name):
 
     Returns
     -------
-    outputlist : List
+    output_list : List
         The contents of the file, in a list of strings, separated at the
         headers.
     """
-    with open(file_name, "r") as file:
+    with open(file_name) as file:
         content = file.readlines()[1:]
         full_sequence = ""
         for line in content:
@@ -37,24 +43,24 @@ def multiple_fna(file_name):
                 full_sequence += line.strip()
             else:
                 full_sequence += "\n"
-        outputlist = full_sequence.split("\n")
-    return outputlist
+        output_list = full_sequence.split("\n")
+    return output_list
 
 
-def consensus_generator(inputlist):
+def consensus_generator(input_list):
     """
     Determines the consensus sequence of a set of sequences.
     Parameters:
     ----------
-    inputlist: list, the list of sequences to be used.
+    input_list: list, the list of sequences to be used.
 
     Returns:
     -------
     consensus: str, the consensus sequence.
     """
-    for i in range(len(inputlist[0])):
+    for i in range(len(input_list[0])):
         column = []
-        for sequence in inputlist:
+        for sequence in input_list:
             column.append(sequence[i])
         print(most_frequent(column), end="")
 
@@ -81,4 +87,5 @@ def main(training=False):
     consensus_generator(output)
 
 
-main(True)
+if __name__ == "__main__":
+    main(True)

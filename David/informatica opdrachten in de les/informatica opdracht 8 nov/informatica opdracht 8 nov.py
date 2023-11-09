@@ -1,4 +1,3 @@
-
 def fna(file_name):
     """
     Opens a FNA file, and returns the contents as a single string.
@@ -22,6 +21,7 @@ def fna(file_name):
         string = ''.join(line).strip()
         string = ''.join(string.splitlines())
     return string
+
 
 def multipleFna(file_name):
     """
@@ -57,5 +57,6 @@ def main():
     for i in intronen:
         complete = complete.replace(i, "")
     print(complete)
+
 
 main()

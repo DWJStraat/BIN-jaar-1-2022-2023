@@ -19,7 +19,7 @@ normaal_seq = 'GAGCCATCTATTGCTTACATTTGCTTCTGACACAACTGTGTTCACTAGCAACCTCAAAC' \
               'AGGTGAACGTGGATGAAGTTGGTGGTGAGGCCCTGGGCAGGTTGGTATCAAGGTTACAA' \
               'GACAGGTTTAAGGAGACCAATAGAAACTGGGCATGTGGAGACAGAGAAGACTCTTGGGTTTCT'
 
-# In het bestand enzymen. txt staan kandidaat restrictie enzymen
+# In het file enzymen. txt staan kandidaat restrictie enzymen
 # Opdracht schrijf een programma dat al deze enzymen doorloopt een suggestie
 # geeft welk restrictie enzym welk knipt in de ene sequentie en niet in de
 # andere sequentie
@@ -31,8 +31,8 @@ bestand = open("enzymen.txt")
 
 # Aanwijzingen voor het schrijven van je programma
 # -------------------------------------------------------------
-# Het lezen van een regel kan met bestand.readline() bijvoorbeeld: regel =
-# bestand.readline(). Print de regel en bekijk wat hieruit komt
+# Het lezen van een regel kan met file.readline() bijvoorbeeld: regel =
+# file.readline(). Print de regel en bekijk wat hieruit komt
 # Lees door totdat je een lege regel aantreft
 # Een regel bestaat uit twee stukken enzym en knipsequentie. Bijvoorbeeld:
 # DdeI C^TGAG

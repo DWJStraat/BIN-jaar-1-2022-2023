@@ -43,7 +43,7 @@ def multiple_fna(file_name):
         headers.
     """
     print("Opening file...")
-    with open(file_name, "r") as file:
+    with open(file_name) as file:
         content = file.readlines()
         full_sequence = ""
         for line in content:
@@ -76,13 +76,12 @@ def backend():
         title='Highest GC content',
         message=f'The sequence with the highest GC content is \n'
                 f'{highestgcobject.getHeader()}\n with a GC content'
-                f' of {highestgc*100:.2f}%')
+                f' of {highestgc * 100:.2f}%')
     highestgcobjectdna = a5.DNA(highestgcobject.getSequence())
     print(f'Header: {highestgcobject.getHeader()}\nGC percentage: '
-          f'{highestgc*100:.2f}%\nTranscript: '
+          f'{highestgc * 100:.2f}%\nTranscript: '
           f'{highestgcobjectdna.getTranscript()}\nLength: '
           f'{highestgcobjectdna.getLength()}')
-
 
 
 def main():

@@ -13,6 +13,9 @@ class BinfFive(discord.Client):
         self.added = False
 
     async def on_ready(self):
+        """
+        This function is called when the bot is ready to be used.
+        """
         await self.wait_until_ready()
         if not self.synced:
             await tree.sync()
@@ -22,6 +25,17 @@ class BinfFive(discord.Client):
         print('Logged on as', self.user)
 
     async def on_message(self, message):
+        """
+        This function is called when a message is sent in a channel the bot has
+        Parameters
+        ----------
+        message
+            The message that was sent
+
+        Returns
+        -------
+        None
+        """
         if message.author == self.user:
             return
         if message.content == 'upload':
@@ -54,7 +68,8 @@ async def analyze(interaction: discord.Interaction):
             highestgc = tempDNA.getGcPercent()
             highestgcobject = j
     await interaction.response.send_message(
-        f'The highest GC content is {highestgc*100:.2f}% in {highestgcobject.header}.')
+        f'The highest GC content is {highestgc * 100:.2f}% in '
+        f'{highestgcobject.header}.')
     highestgcobjectdna = a5.DNA(highestgcobject.getSequence())
     print(f'Header: {highestgcobject.getHeader()}\nGC percentage: '
           f'{highestgc * 100:.2f}%\nTranscript: '
